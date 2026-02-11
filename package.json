@@ -1,0 +1,11 @@
+{
+  "name": "neurotask-ui-qa",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "playwright": "^1.41.2"
+  },
+  "scripts": {
+    "qa:ui": "node qa/playwright-smoke.mjs"
+  }
+}

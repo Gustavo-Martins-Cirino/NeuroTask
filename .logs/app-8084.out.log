@@ -1,0 +1,10 @@
+
+   ____   _    _   ____   _____    _ 
+ / ___| | |  | | / ___| |_   _|   / \
+| |  _  | |  | | \___ \   | |    / _ \ 
+| |_| | | |__| |  ___) |  | |   / ___ \
+ \____|  \____/  |____/   |_|  /_/   \_\ 
+
+16:04:15.311 [main] INFO  c.g.m.MydayProductivityApplication - Starting MydayProductivityApplication v0.0.1-SNAPSHOT using Java 21.0.5 with PID 16432 (C:\Users\User\OneDrive\Desktop\Dev\Programação\Projetos - Pessoais\myday-productivity\target\myday-productivity-0.0.1-SNAPSHOT.jar started by User in C:\Users\User\OneDrive\Desktop\Dev\Programação\Projetos - Pessoais\myday-productivity)
+16:04:15.316 [main] DEBUG c.g.m.MydayProductivityApplication - Running with Spring Boot v3.5.7, Spring v6.2.12
+16:04:15.317 [main] INFO  c.g.m.MydayProductivityApplication - No active profile set, falling back to 1 default profile: "default"

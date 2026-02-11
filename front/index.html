@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Links na Bio — landing page pessoal." />
+    <title>Links na Bio</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-1: #6d28d9;
+        --bg-2: #2563eb;
+
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+
+        --surface: rgba(255, 255, 255, 0.1);
+        --surface-border: rgba(255, 255, 255, 0.18);
+        --button: rgba(255, 255, 255, 0.14);
+        --button-hover: rgba(255, 255, 255, 0.22);
+
+        --shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto,
+          Arial, sans-serif;
+        color: var(--text);
+
+        background: radial-gradient(
+            1200px 800px at 20% 10%,
+            rgba(255, 255, 255, 0.16),
+            transparent 55%
+          ),
+          radial-gradient(
+            900px 600px at 80% 30%,
+            rgba(255, 255, 255, 0.1),
+            transparent 55%
+          ),
+          linear-gradient(135deg, var(--bg-1), var(--bg-2));
+
+        display: grid;
+        place-items: center;
+        padding: 24px 16px;
+      }
+
+      .page {
+        width: 100%;
+        max-width: 520px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--surface-border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        padding: 22px;
+      }
+
+      header {
+        text-align: center;
+        padding: 10px 6px 18px;
+      }
+
+      .avatar {
+        width: 104px;
+        height: 104px;
+        border-radius: 999px;
+        margin: 0 auto 14px;
+        padding: 4px;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.55),
+          rgba(255, 255, 255, 0.18)
+        );
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+      }
+
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        border-radius: 999px;
+        display: block;
+        object-fit: cover;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 1.35rem;
+        line-height: 1.15;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+
+      .bio {
+        margin: 10px auto 0;
+        max-width: 40ch;
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.45;
+      }
+
+      .links {
+        display: grid;
+        gap: 12px;
+        padding: 6px 2px 14px;
+      }
+
+      .link-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 600;
+        letter-spacing: 0.2px;
+
+        background: var(--button);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 16px;
+        padding: 14px 16px;
+
+        transition: transform 0.3s ease, background-color 0.3s ease,
+          box-shadow 0.3s ease, border-color 0.3s ease;
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+      }
+
+      .link-button:hover {
+        background: var(--button-hover);
+        border-color: rgba(255, 255, 255, 0.34);
+        transform: translateY(-2px);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+      }
+
+      .link-button:active {
+        transform: translateY(0);
+      }
+
+      .link-button:focus-visible {
+        outline: 3px solid rgba(255, 255, 255, 0.55);
+        outline-offset: 2px;
+      }
+
+      .pill {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        background: rgba(0, 0, 0, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        padding: 4px 10px;
+        border-radius: 999px;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 14px;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.82rem;
+      }
+
+      @media (min-width: 768px) {
+        body {
+          padding: 42px 18px;
+        }
+
+        .card {
+          padding: 26px;
+        }
+
+        h1 {
+          font-size: 1.55rem;
+        }
+
+        .bio {
+          font-size: 1rem;
+        }
+
+        .avatar {
+          width: 112px;
+          height: 112px;
+        }
+
+        .link-button {
+          padding: 15px 18px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .link-button {
+          transition: none;
+        }
+
+        .link-button:hover {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="page" role="main" aria-label="Links na Bio">
+      <section class="card" aria-label="Cartão de perfil">
+        <header>
+          <div class="avatar" aria-hidden="true">
+            <img
+              src="https://via.placeholder.com/300x300.png?text=Sua+Foto"
+              alt="Foto de perfil"
+              loading="lazy"
+            />
+          </div>
+
+          <h1>Seu Nome</h1>
+          <p class="bio">
+            Uma breve biografia aqui. Ex.: Criador(a) • Dev • Conteúdo sobre
+            produtividade e tecnologia.
+          </p>
+        </header>
+
+        <nav class="links" aria-label="Lista de links">
+          <a class="link-button" href="#" aria-label="Abrir WhatsApp">
+            WhatsApp <span class="pill">Contato</span>
+          </a>
+
+          <a class="link-button" href="#" aria-label="Abrir Instagram">
+            Instagram <span class="pill">Social</span>
+          </a>
+
+          <a class="link-button" href="#" aria-label="Abrir Portfólio">
+            Portfólio <span class="pill">Trabalhos</span>
+          </a>
+        </nav>
+      </section>
+
+      <footer>© 2026 Seu Nome. Todos os direitos reservados.</footer>
+    </main>
+  </body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NeuroTask | Cognitive Manager</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* --- TEMAS (VARIAVEIS CSS) --- */
+      :root {
+        /* Padrão (Dark Mode) */
+        --bg-color: #0f172a;
+        --surface-color: #1e293b;
+        --surface-hover: #334155;
+        --border-color: rgba(255, 255, 255, 0.1);
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --primary-accent: #6366f1; /* Indigo */
+        --secondary-accent: #a855f7; /* Roxo */
+        --ai-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Light Mode (Ativado via JS) */
+      [data-theme="light"] {
+        --bg-color: #f1f5f9;
+        --surface-color: #ffffff;
+        --surface-hover: #e2e8f0;
+        --border-color: rgba(0, 0, 0, 0.1);
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --card-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-primary);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      /* --- HEADER --- */
+      header {
+        padding: 1rem 2rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--surface-color);
+        z-index: 10;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: var(--ai-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .controls {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+
+      /* Toggle Button */
+      .theme-btn {
+        background: none;
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        padding: 8px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+      }
+      .theme-btn:hover {
+        background: var(--surface-hover);
+      }
+
+      /* --- LAYOUT DE 3 COLUNAS --- */
+      .container {
+        display: grid;
+        grid-template-columns: 300px 1fr 350px; /* To Do | Calendar | AI & Stats */
+        height: 100%;
+        overflow: hidden;
+      }
+
+      /* --- COLUNA 1: TO DO --- */
+      .sidebar {
+        background-color: var(--surface-color);
+        padding: 1.5rem;
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      h2 {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem;
+      }
+
+      .input-group {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-color);
+        color: var(--text-primary);
+        outline: none;
+      }
+      input:focus {
+        border-color: var(--primary-accent);
+      }
+
+      button.add-btn {
+        background: var(--primary-accent);
+        border: none;
+        color: white;
+        padding: 0 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .task-list {
+        flex: 1;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+
+      /* Cards */
+      .task-card {
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        padding: 1rem;
+        border-radius: 10px;
+        cursor: grab;
+        box-shadow: var(--card-shadow);
+      }
+      .task-card:hover {
+        border-color: var(--primary-accent);
+        transform: translateY(-2px);
+      }
+      .tag {
+        font-size: 0.7rem;
+        padding: 2px 8px;
+        border-radius: 12px;
+        background: rgba(99, 102, 241, 0.2);
+        color: var(--primary-accent);
+      }
+      .tag.HIGH {
+        background: rgba(239, 68, 68, 0.2);
+        color: #ef4444;
+      }
+
+      /* --- COLUNA 2: CALENDÁRIO --- */
+      .calendar-view {
+        padding: 2rem;
+        overflow-y: auto;
+        background-image: radial-gradient(
+          var(--border-color) 1px,
+          transparent 1px
+        );
+        background-size: 20px 20px;
+      }
+
+      .time-grid {
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        gap: 0.5rem;
+      }
+
+      .time-slot-label {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 10px;
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+      }
+
+      .drop-zone {
+        height: 70px;
+        border-radius: 8px;
+        border: 1px dashed var(--border-color);
+        background: rgba(255, 255, 255, 0.02);
+        transition: 0.2s;
+        position: relative;
+        padding: 5px;
+      }
+      .drop-zone.drag-over {
+        background: rgba(99, 102, 241, 0.1);
+        border-color: var(--primary-accent);
+      }
+      .drop-zone .task-card {
+        height: 100%;
+        background: var(--primary-accent);
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .drop-zone .task-card .tag {
+        background: rgba(0, 0, 0, 0.2);
+        color: white;
+      }
+
+      /* --- COLUNA 3: AI & STATS (NOVIDADE) --- */
+      .right-panel {
+        background-color: var(--surface-color);
+        border-left: 1px solid var(--border-color);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .stats-box,
+      .ai-box {
+        background: var(--bg-color);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--card-shadow);
+      }
+
+      /* Stats Skeleton */
+      .stat-item {
+        margin-top: 1rem;
+      }
+      .stat-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+        color: var(--text-secondary);
+      }
+      .progress-bar {
+        height: 8px;
+        background: var(--surface-hover);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: var(--ai-gradient);
+        width: 0%;
+        transition: width 1s ease;
+      }
+
+      /* AI Chat Skeleton */
+      .ai-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 1rem;
+        color: var(--primary-accent);
+        font-weight: bold;
+      }
+      .ai-chat-area {
+        height: 200px;
+        overflow-y: auto;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.02);
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        font-style: italic;
+      }
+      .ai-btn {
+        margin-top: 10px;
+        width: 100%;
+        padding: 10px;
+        background: var(--surface-hover);
+        border: 1px solid var(--primary-accent);
+        color: var(--primary-accent);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .ai-btn:hover {
+        background: var(--primary-accent);
+        color: white;
+      }
+    </style>
+  </head>
+  <body data-theme="dark">
+    <header>
+      <div class="logo">
+        🧠 NeuroTask
+        <span
+          style="
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-left: 5px;
+          "
+          >v2.0 Beta</span
+        >
+      </div>
+      <div class="controls">
+        <span style="font-size: 0.9rem; color: var(--text-secondary)"
+          >Bem-vindo, <strong>Gustavo</strong></span
+        >
+        <button class="theme-btn" onclick="toggleTheme()" title="Mudar Tema">
+          ☀
+        </button>
+      </div>
+    </header>
+
+    <div class="container">
+      <aside class="sidebar">
+        <h2>To Do (sem horário)</h2>
+        <div class="input-group">
+          <input type="text" id="newTaskInput" placeholder="Nova tarefa..." />
+          <button class="add-btn" onclick="handleAddTask()">+</button>
+        </div>
+        <div
+          class="task-list"
+          id="todoList"
+          ondragover="allowDrop(event)"
+          ondrop="drop(event, 'todo')"
+        ></div>
+      </aside>
+
+      <main class="calendar-view">
+        <div style="margin-bottom: 20px">
+          <h1>Timeline Focada</h1>
+          <p style="color: var(--text-secondary)">
+            Arraste as tarefas para bloquear seu tempo.
+          </p>
+        </div>
+        <div class="time-grid" id="calendarGrid"></div>
+      </main>
+
+      <aside class="right-panel">
+        <div class="stats-box">
+          <h2>📊 Productivity Pulse</h2>
+
+          <div class="stat-item">
+            <div class="stat-label">
+              <span>Concluídas vs Planejadas</span>
+              <span id="stat-completed-txt">0/0</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="stat-completed-bar"></div>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-label">
+              <span>Nível de Foco (Deep Work)</span>
+              <span id="stat-focus-txt">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div
+                class="progress-fill"
+                id="stat-focus-bar"
+                style="background: var(--secondary-accent)"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-box">
+          <div class="ai-header">🤖 Neural Coach</div>
+          <div class="ai-chat-area" id="aiResponseArea">
+            "Olá, Gustavo. Aguardando dados do seu dia para gerar insights..."
+          </div>
+          <button class="ai-btn" onclick="askAIForFeedback()">
+            Gerar Análise Diária
+          </button>
+        </div>
+      </aside>
+    </div>
+
+    <script>
+      // --- CONFIGURAÇÃO INICIAL E DADOS (MOCK) ---
+      let tasks = [
+        {
+          id: 1,
+          title: "Configurar Spring Boot",
+          tag: "HIGH",
+          status: "PENDING",
+        },
+        {
+          id: 2,
+          title: "Criar Entidade Task",
+          tag: "MEDIUM",
+          status: "PENDING",
+        },
+      ];
+
+      // --- FUNÇÕES DE UI (TEMA) ---
+      function toggleTheme() {
+        const body = document.body;
+        const currentTheme = body.getAttribute("data-theme");
+        const icon = document.querySelector(".theme-btn");
+
+        if (currentTheme === "dark") {
+          body.setAttribute("data-theme", "light");
+          icon.innerHTML = "🌙";
+        } else {
+          body.setAttribute("data-theme", "dark");
+          icon.innerHTML = "☀";
+        }
+      }
+
+      // --- RENDERIZAÇÃO PRINCIPAL ---
+      function render() {
+        const todoList = document.getElementById("todoList");
+        const calendarGrid = document.getElementById("calendarGrid");
+
+        todoList.innerHTML = "";
+        calendarGrid.innerHTML = "";
+
+        // 1. Renderiza To Do
+        tasks
+          .filter((t) => t.status === "PENDING")
+          .forEach((task) => {
+            todoList.appendChild(createTaskCard(task));
+          });
+
+        // 2. Renderiza Calendário (08h as 18h)
+        for (let i = 8; i <= 18; i++) {
+          // Hora
+          const label = document.createElement("div");
+          label.className = "time-slot-label";
+          label.innerText = `${i}:00`;
+          calendarGrid.appendChild(label);
+
+          // Slot (Zona de Drop)
+          const slot = document.createElement("div");
+          slot.className = "drop-zone";
+          slot.dataset.hour = i;
+          slot.ondragover = allowDrop;
+          slot.ondragleave = (e) => e.target.classList.remove("drag-over");
+          slot.ondrop = (e) => drop(e, "calendar", i);
+
+          // Se tiver tarefa nessa hora, renderiza dentro
+          const taskHere = tasks.find(
+            (t) => t.status === "SCHEDULED" && t.hour === i
+          );
+          if (taskHere) slot.appendChild(createTaskCard(taskHere));
+
+          calendarGrid.appendChild(slot);
+        }
+
+        // 3. Atualiza Estatísticas (Mock visual)
+        updateStatsUI();
+      }
+
+      function createTaskCard(task) {
+        const el = document.createElement("div");
+        el.className = "task-card";
+        el.draggable = true;
+        el.id = `task-${task.id}`;
+        el.innerHTML = `
+                <div>${task.title}</div>
+                <span class="tag ${task.tag}">${task.tag}</span>
+            `;
+        el.ondragstart = (e) => {
+          e.dataTransfer.setData("text", task.id);
+          el.style.opacity = "0.5";
+        };
+        el.ondragend = () => (el.style.opacity = "1");
+        return el;
+      }
+
+      function updateStatsUI() {
+        // Simulação de cálculo de progresso
+        const total = tasks.length;
+        const scheduled = tasks.filter((t) => t.status === "SCHEDULED").length;
+        const percent = total === 0 ? 0 : (scheduled / total) * 100;
+
+        document.getElementById(
+          "stat-completed-txt"
+        ).innerText = `${scheduled}/${total}`;
+        document.getElementById(
+          "stat-completed-bar"
+        ).style.width = `${percent}%`;
+
+        // Random só pra testar a animação
+        document.getElementById("stat-focus-txt").innerText = `${Math.round(
+          percent * 0.8
+        )}%`;
+        document.getElementById("stat-focus-bar").style.width = `${
+          percent * 0.8
+        }%`;
+      }
+
+      // --- DRAG AND DROP ---
+      function allowDrop(e) {
+        e.preventDefault();
+        e.target.closest(".drop-zone")?.classList.add("drag-over");
+      }
+
+      function drop(e, targetZone, hour = null) {
+        e.preventDefault();
+        document
+          .querySelectorAll(".drop-zone")
+          .forEach((z) => z.classList.remove("drag-over"));
+
+        const taskId = parseInt(e.dataTransfer.getData("text"));
+        const task = tasks.find((t) => t.id === taskId);
+
+        if (targetZone === "calendar") {
+          task.status = "SCHEDULED";
+          task.hour = hour;
+          // TODO: Chamar backendUpdateTask(task.id, hour)
+        } else {
+          task.status = "PENDING";
+          task.hour = null;
+        }
+        render();
+      }
+
+      function handleAddTask() {
+        const input = document.getElementById("newTaskInput");
+        if (!input.value) return;
+        const newTask = {
+          id: Date.now(),
+          title: input.value,
+          tag: "MEDIUM",
+          status: "PENDING",
+        };
+        tasks.push(newTask);
+        input.value = "";
+
+        // TODO: Chamar backendCreateTask(newTask)
+        render();
+      }
+
+      // --- ESQUELETO DE INTEGRAÇÃO COM BACKEND (JAVA) ---
+      // Estas funções estão prontas para serem preenchidas quando você configurar o Fetch API
+
+      async function askAIForFeedback() {
+        const chatArea = document.getElementById("aiResponseArea");
+        chatArea.innerHTML =
+          "<em>Pensando... (Consultando API Java/OpenAI)</em>";
+
+        // TODO: BACKEND CONNECT
+        // const response = await fetch('http://localhost:8080/api/ai/feedback');
+        // const text = await response.text();
+
+        // Simulação (apagar depois):
+        setTimeout(() => {
+          chatArea.innerHTML =
+            "<strong>Coach diz:</strong> Gustavo, notei que você agendou 'Configurar Spring Boot' para as 18h. Historicamente, tarefas de código complexo rendem mais pela manhã. Quer que eu sugira uma troca?";
+        }, 1500);
+      }
+
+      async function syncTasksFromBackend() {
+        // TODO: BACKEND CONNECT
+        // const response = await fetch('http://localhost:8080/api/tasks');
+        // tasks = await response.json();
+        // render();
+        console.log("Tentativa de buscar tarefas do Java...");
+      }
+
+      // Inicialização
+      render();
+      // syncTasksFromBackend(); // Descomente quando o Java estiver rodando
+    </script>
+  </body>
+</html>
