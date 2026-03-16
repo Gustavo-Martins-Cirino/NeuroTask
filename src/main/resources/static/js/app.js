@@ -10,6 +10,7 @@
 
 import { taskService } from "./api/taskService.js";
 import { calendarView } from "./modules/calendarView.js";
+import { neurotaskApi } from "./api/neurotask-api.js";
 
  const ELDERLY_MODE_STORAGE_KEY = "elderlyMode";
 
@@ -335,6 +336,7 @@ function initEventListeners() {
 // Estado Global do Foco
 const focusState = {
   activeTaskId: null,
+  backendSessionId: null, // ID da sessão Focus no backend
   timerInterval: null,
   timeLeft: 25 * 60,
   initialDuration: 25 * 60,
@@ -453,7 +455,7 @@ document.addEventListener(
 );
 
 // Inicia (ou restaura) o Modo Foco
-function startFocusMode(id) {
+async function startFocusMode(id) {
   if (focusState.activeTaskId !== id) {
     focusState.activeTaskId = id;
     focusState.timeLeft = focusState.settings.durationMinutes * 60;
@@ -461,6 +463,21 @@ function startFocusMode(id) {
     focusState.isPaused = true;
     if (focusState.timerInterval) clearInterval(focusState.timerInterval);
     focusState.timerInterval = null;
+    
+    // Registrar sessão no backend
+    try {
+      const session = await neurotaskApi.startFocusSession(
+        id,
+        focusState.settings.durationMinutes,
+        5, // breakMinutes
+        4  // totalCycles
+      );
+      if (session && session.id) {
+        focusState.backendSessionId = session.id;
+      }
+    } catch (e) {
+      console.warn("Focus backend unavailable:", e);
+    }
   }
 
   // Force default theme if undefined to 'forest' (video proof)
@@ -481,6 +498,11 @@ function startGlobalTimer() {
       updatePIPDisplay();
     } else if (focusState.timeLeft === 0 && !focusState.isPaused) {
       focusState.isPaused = true;
+      // Completar sessão no backend
+      if (focusState.backendSessionId) {
+        neurotaskApi.completeFocusSession(focusState.backendSessionId).catch(() => {});
+        focusState.backendSessionId = null;
+      }
       alert("Sessão de Foco concluída!");
       updateFocusDisplay();
     }
@@ -493,12 +515,14 @@ function renderFocusOverlay() {
   document.getElementById("focus-pip")?.remove();
 
   // Dados da tarefa
-  let taskTitle = "Tarefa sem nome";
+  let taskTitle = "Tarefa sem título";
   if (window.tasks && Array.isArray(window.tasks)) {
     const t = window.tasks.find(
       (tk) => String(tk.id) === String(focusState.activeTaskId),
     );
-    if (t) taskTitle = t.title;
+    if (t && t.title && t.title.trim()) {
+      taskTitle = t.title;
+    }
   }
 
   const themeKey = focusState.settings.theme || 'forest';
@@ -684,9 +708,10 @@ function renderFocusOverlay() {
        background: ${panelBg}; backdrop-filter: blur(40px);
        border-radius: 20px; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); 
        color: ${panelText}; transform-origin: bottom right;
-       transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-       opacity: 0; transform: scale(0.9) translateY(10px); pointer-events: none;
+       transition: opacity 0.25s ease, transform 0.25s ease;
+       opacity: 0; transform: scale(0.95) translateY(8px); pointer-events: none;
        z-index: 60; border: 1px solid rgba(255,255,255,0.1);
+       overflow: hidden;
     ">
        <div style="display:flex; justify-content:space-between; margin-bottom: 20px; align-items:center;">
           <h4 style="margin:0; opacity: 0.8; font-weight: 800; font-size: 12px; letter-spacing: 2px;">AMBIENTE</h4>
@@ -713,10 +738,10 @@ function renderFocusOverlay() {
                    height: 50px; border-radius: 12px; cursor: pointer;
                    background: ${themes[t].bg}; background-image: ${themes[t].bgImage || "none"}; background-size: cover;
                    background-position: center; 
-                   border: 2px solid ${isActive ? '#fff' : 'rgba(255,255,255,0.3)'};
-                   transform: ${isActive ? 'scale(1.1)' : 'scale(1)'};
-                   opacity: ${isActive ? "1" : "0.8"};
-                   transition: all 0.2s;
+                   border: 3px solid ${isActive ? '#fff' : 'rgba(255,255,255,0.2)'};
+                   box-shadow: ${isActive ? '0 0 0 2px rgba(255,255,255,0.5)' : 'none'};
+                   opacity: ${isActive ? "1" : "0.7"};
+                   transition: border-color 0.15s, opacity 0.15s, box-shadow 0.15s;
                 "></div>
              `;
                })
@@ -778,6 +803,16 @@ function renderFocusOverlay() {
 
   const closeFn = () => {
     focusState.isPaused = true;
+    // Cancelar sessão no backend
+    if (focusState.backendSessionId) {
+      neurotaskApi.cancelFocusSession(focusState.backendSessionId).catch(() => {});
+      focusState.backendSessionId = null;
+    }
+    // Limpar timer ao fechar
+    if (focusState.timerInterval) {
+      clearInterval(focusState.timerInterval);
+      focusState.timerInterval = null;
+    }
     overlay.style.opacity = "0";
     setTimeout(() => {
       overlay.remove();
@@ -791,11 +826,24 @@ function renderFocusOverlay() {
 
   overlay.querySelector("#focus-btn-toggle").onclick = () => {
     focusState.isPaused = !focusState.isPaused;
+    // Sincronizar pause/resume com backend
+    if (focusState.backendSessionId) {
+      if (focusState.isPaused) {
+        neurotaskApi.pauseFocusSession(focusState.backendSessionId).catch(() => {});
+      } else {
+        neurotaskApi.resumeFocusSession(focusState.backendSessionId).catch(() => {});
+      }
+    }
     updateControlsUI();
     resetIdleTimer();
   };
   overlay.querySelector("#focus-btn-complete").onclick = async () => {
     if (confirm("Concluir esta tarefa agora?")) {
+      // Completar sessão Focus no backend
+      if (focusState.backendSessionId) {
+        neurotaskApi.completeFocusSession(focusState.backendSessionId).catch(() => {});
+        focusState.backendSessionId = null;
+      }
       await taskService.completeTask(focusState.activeTaskId);
       if (window.refreshTasksAndCalendar)
         await window.refreshTasksAndCalendar();
@@ -804,35 +852,47 @@ function renderFocusOverlay() {
   };
 
   const panel = overlay.querySelector("#focus-settings-panel");
-  const togglePanel = (show) => {
-    if (show) {
-      panel.style.opacity = "1";
-      panel.style.transform = "scale(1) translateY(0)";
-      panel.style.pointerEvents = "all";
-    } else {
-      panel.style.opacity = "0";
-      panel.style.transform = "scale(0.9) translateY(10px)";
-      panel.style.pointerEvents = "none";
-    }
+  
+  // FIX 3: Estado explícito com variável global para evitar loops de evento
+  let configOpen = false;
+  
+  const openPanel = () => {
+    configOpen = true;
+    panel.style.opacity = "1";
+    panel.style.transform = "scale(1) translateY(0)";
+    panel.style.pointerEvents = "all";
+  };
+  
+  const closePanel = () => {
+    configOpen = false;
+    panel.style.opacity = "0";
+    panel.style.transform = "scale(0.95) translateY(8px)";
+    panel.style.pointerEvents = "none";
   };
 
   overlay.querySelector("#focus-btn-settings").onclick = (e) => {
     e.stopPropagation();
-    togglePanel(true);
+    e.preventDefault();
+    // Estado explícito: se está aberto, fecha; se está fechado, abre
+    if (configOpen) {
+      closePanel();
+    } else {
+      openPanel();
+    }
   };
   overlay.querySelector("#close-settings").onclick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const modal = document.querySelector(".settings-modal");
-    if (modal) {
-      modal.style.display = "none";
-      modal.classList.remove("active");
-    }
+    e.stopImmediatePropagation();
+    closePanel();
+    return false;
   };
   overlay.onclick = (e) => {
     resetIdleTimer();
-    if (!panel.contains(e.target) && !e.target.closest("#focus-btn-settings"))
-      togglePanel(false);
+    // Clique fora do painel E fora do botão de settings: fecha
+    if (!panel.contains(e.target) && !e.target.closest("#focus-btn-settings") && !e.target.closest("#close-settings")) {
+      closePanel();
+    }
   };
 
   // Inputs

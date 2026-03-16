@@ -2,6 +2,7 @@ package com.gustavocirino.myday_productivity.model;
 
 import com.gustavocirino.myday_productivity.model.enums.TaskStatus;
 import com.gustavocirino.myday_productivity.model.enums.TaskPriority;
+import com.gustavocirino.myday_productivity.model.enums.ContextType;
 import com.gustavocirino.myday_productivity.model.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String title;
 
     @Column(columnDefinition = "TEXT")
@@ -35,6 +36,29 @@ public class Task {
 
     @Column(length = 20)
     private String color;
+
+    /**
+     * Peso cognitivo da tarefa (escala 1–5).
+     * 1 = tarefa leve (ex.: responder mensagem), 5 = tarefa pesada (ex.: relatório complexo).
+     * Usado pelo cálculo da Bateria Social/Foco para compor o totalTaskWeight do dia.
+     */
+    @Column(nullable = false)
+    private Integer weight = 1;
+
+    /**
+     * Duração estimada de execução em minutos, informada pelo usuário ou sugerida pela IA.
+     * Usada pelo algoritmo de Batching para calcular suggestedFocusDurationMinutes do grupo.
+     */
+    @Column(name = "estimated_duration_minutes")
+    private Integer estimatedDurationMinutes;
+
+    /**
+     * Tipo de contexto de execução da tarefa.
+     * Dimensão principal usada pelo algoritmo de clustering para agrupar tarefas similares.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "context_type")
+    private ContextType contextType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -138,5 +162,29 @@ public class Task {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
+    public Integer getEstimatedDurationMinutes() {
+        return estimatedDurationMinutes;
+    }
+
+    public void setEstimatedDurationMinutes(Integer estimatedDurationMinutes) {
+        this.estimatedDurationMinutes = estimatedDurationMinutes;
+    }
+
+    public ContextType getContextType() {
+        return contextType;
+    }
+
+    public void setContextType(ContextType contextType) {
+        this.contextType = contextType;
     }
 }

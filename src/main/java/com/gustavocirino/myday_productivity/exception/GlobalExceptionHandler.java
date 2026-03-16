@@ -25,6 +25,35 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     /**
+     * Trata exceções de domínio customizadas.
+     * Permite tratamento específico para TaskNotFoundException, UserNotFoundException, etc.
+     */
+    @ExceptionHandler(DomainException.class)
+    public ResponseEntity<Map<String, Object>> handleDomainException(DomainException ex) {
+        log.warn("⚠️ Erro de domínio: {}", ex.getMessage());
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        // Retorna 404 para exceções de "não encontrado"
+        if (ex instanceof TaskNotFoundException || ex instanceof UserNotFoundException) {
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        // Retorna 401 para exceções de autenticação
+        if (ex instanceof AuthenticationException) {
+            status = HttpStatus.UNAUTHORIZED;
+        }
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", status.value());
+        body.put("error", status.getReasonPhrase());
+        body.put("message", ex.getMessage());
+
+        return ResponseEntity.status(status).body(body);
+    }
+
+    /**
      * Trata erros de validação do Bean Validation em @RequestBody (@Valid).
      * Ex.: campos obrigatórios ausentes.
      */

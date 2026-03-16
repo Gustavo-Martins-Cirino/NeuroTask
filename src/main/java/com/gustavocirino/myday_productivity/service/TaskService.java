@@ -1,6 +1,8 @@
 package com.gustavocirino.myday_productivity.service;
 
 import com.gustavocirino.myday_productivity.dto.*;
+import com.gustavocirino.myday_productivity.exception.TaskNotFoundException;
+import com.gustavocirino.myday_productivity.exception.UserNotFoundException;
 import com.gustavocirino.myday_productivity.model.Task;
 import com.gustavocirino.myday_productivity.model.User;
 import com.gustavocirino.myday_productivity.model.enums.TaskPriority;
@@ -8,6 +10,9 @@ import com.gustavocirino.myday_productivity.model.enums.TaskStatus;
 import com.gustavocirino.myday_productivity.repository.TaskRepository;
 import com.gustavocirino.myday_productivity.repository.UserRepository;
 import com.gustavocirino.myday_productivity.dto.DashboardSummaryDTO;
+import com.gustavocirino.myday_productivity.service.ai.ProcrastinationService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,15 +29,20 @@ import org.springframework.data.domain.Sort;
  * Responsável por: Validações, Regras de Negócio, Transições de Estado
  */
 @Service
+@Slf4j
 public class TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final ProcrastinationService procrastinationService;
     private static final String DEFAULT_COLOR = "#34a853";
 
-    public TaskService(TaskRepository taskRepository, UserRepository userRepository) {
+    public TaskService(TaskRepository taskRepository,
+                       UserRepository userRepository,
+                       @Lazy ProcrastinationService procrastinationService) {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
+        this.procrastinationService = procrastinationService;
     }
 
     // ==================== CRUD OPERATIONS ====================
@@ -74,7 +84,7 @@ public class TaskService {
      */
     public TaskResponseDTO getTaskById(Long id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task não encontrada com ID: " + id));
+                .orElseThrow(() -> new TaskNotFoundException(id));
         return toDTO(task);
     }
 
@@ -130,7 +140,7 @@ public class TaskService {
     @Transactional
     public TaskResponseDTO moveTask(Long id, TaskMoveDTO dto) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task não encontrada"));
+                .orElseThrow(() -> new TaskNotFoundException(id));
 
         // Validação temporal
         if (dto.newStartTime() == null || dto.newEndTime() == null) {
@@ -360,6 +370,16 @@ public class TaskService {
     public TaskResponseDTO moveBackToBacklog(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task não encontrada"));
+
+        // Só registra adiamento se a tarefa estava efetivamente agendada
+        if (task.getStatus() == TaskStatus.SCHEDULED) {
+            try {
+                procrastinationService.handleTaskPostponement(task);
+            } catch (Exception ex) {
+                // Não bloqueia o fluxo principal se o rastreador falhar
+                log.warn("Falha ao registrar adiamento para tarefa {}: {}", id, ex.getMessage());
+            }
+        }
 
         // Remove datas e volta para PENDING
         task.setStartTime(null);

@@ -63,7 +63,7 @@ public class AuthService {
                 savedUser.isVerified(), null);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public AuthUserResponseDTO login(AuthLoginRequestDTO request) {
         String normalizedEmail = normalize(request.email());
         User user = userRepository.findByEmail(normalizedEmail)
@@ -75,6 +75,7 @@ public class AuthService {
 
         String name = userProfileRepository.findByUser(user).map(UserProfile::getName).orElse(null);
         String token = generateOrRefreshToken(user);
+        userRepository.save(user);
 
         return new AuthUserResponseDTO(user.getId(), name, user.getEmail(), user.isVerified(), token);
     }

@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -317,16 +318,43 @@ public class ProductivityAnalysisService {
 
     private String buildAnalysisContext(List<Task> tasks, long total, long completed, long late, long scheduled,
             double rate) {
+        // Time patterns for the last 7 days
+        LocalDateTime weekAgo = LocalDateTime.now().minusDays(7);
+        List<Task> recentTasks = tasks.stream()
+                .filter(t -> t.getCreatedAt() != null && t.getCreatedAt().isAfter(weekAgo))
+                .toList();
+        long recentCompleted = recentTasks.stream().filter(t -> t.getStatus() == TaskStatus.DONE).count();
+        long recentTotal = recentTasks.size();
+        double recentRate = recentTotal > 0 ? (recentCompleted * 100.0 / recentTotal) : 0;
+
+        // Peak hour analysis
+        Map<Integer, Long> hourCounts = tasks.stream()
+                .filter(t -> t.getStartTime() != null && t.getStatus() == TaskStatus.DONE)
+                .collect(java.util.stream.Collectors.groupingBy(
+                        t -> t.getStartTime().getHour(),
+                        java.util.stream.Collectors.counting()));
+        String peakHour = hourCounts.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(e -> e.getKey() + "h (" + e.getValue() + " tarefas)")
+                .orElse("sem dados");
+
         return """
                 Total de Tarefas: %d
                 Tarefas Concluídas: %d
                 Tarefas Atrasadas: %d
                 Tarefas Agendadas: %d
-                Taxa de Conclusão: %.1f%%
+                Taxa de Conclusão Geral: %.1f%%
+
+                ÚLTIMOS 7 DIAS:
+                Tarefas criadas: %d | Concluídas: %d | Taxa recente: %.1f%%
 
                 DISTRIBUIÇÃO DE PRIORIDADES:
                 %s
-                """.formatted(total, completed, late, scheduled, rate, analyzePriorities(tasks));
+
+                HORÁRIO COM MAIS CONCLUSÕES: %s
+                """.formatted(total, completed, late, scheduled, rate,
+                        recentTotal, recentCompleted, recentRate,
+                        analyzePriorities(tasks), peakHour);
     }
 
     private String analyzePriorities(List<Task> tasks) {
