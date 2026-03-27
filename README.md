@@ -443,4 +443,4 @@ MIT License - Use livremente!
 
 ---
 
-**Desenvolvido com ❤️ e ☕ | Spring Boot + Google Gemini AI**
+**Desenvolvido com ☕ | Spring Boot + Google Gemini AI**
