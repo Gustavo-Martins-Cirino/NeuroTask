@@ -77,6 +77,13 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
+                // Retornar 401 Unauthorized em vez de 403 Forbidden para requisições não autenticadas
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendError(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                        })
+                )
+
                 // Adiciona filtro JWT antes do filtro de autenticação padrão
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

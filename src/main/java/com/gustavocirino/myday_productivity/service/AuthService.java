@@ -5,6 +5,7 @@ import com.gustavocirino.myday_productivity.model.User;
 import com.gustavocirino.myday_productivity.model.UserProfile;
 import com.gustavocirino.myday_productivity.repository.UserProfileRepository;
 import com.gustavocirino.myday_productivity.repository.UserRepository;
+import com.gustavocirino.myday_productivity.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -27,6 +28,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
     private final JavaMailSender mailSender;
+    private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Transactional
@@ -49,6 +51,7 @@ public class AuthService {
         user.setVerified(false);
         user.setVerificationCode(generateVerificationCode());
 
+        // AQUI: Salvando o usuário no banco para gerar o ID
         User savedUser = userRepository.save(user);
 
         UserProfile profile = new UserProfile();
@@ -74,8 +77,9 @@ public class AuthService {
         }
 
         String name = userProfileRepository.findByUser(user).map(UserProfile::getName).orElse(null);
+        
+        // Mantido stateless: gera o token sem salvar no banco
         String token = generateOrRefreshToken(user);
-        userRepository.save(user);
 
         return new AuthUserResponseDTO(user.getId(), name, user.getEmail(), user.isVerified(), token);
     }
@@ -92,8 +96,11 @@ public class AuthService {
 
         user.setVerified(true);
         user.setVerificationCode(null);
-        String token = generateOrRefreshToken(user);
+        
+        // AQUI: Salvando a alteração de status para verificado
         userRepository.save(user);
+
+        String token = generateOrRefreshToken(user);
 
         String name = userProfileRepository.findByUser(user).map(UserProfile::getName).orElse(null);
         return new AuthUserResponseDTO(user.getId(), name, user.getEmail(), true, token);
@@ -110,6 +117,8 @@ public class AuthService {
 
         String newCode = generateVerificationCode();
         user.setVerificationCode(newCode);
+       
+        // AQUI: Salvando o novo código gerado
         userRepository.save(user);
 
         log.info("Novo código gerado para {}: {}", normalizedEmail, newCode);
@@ -276,12 +285,8 @@ public class AuthService {
     }
 
     private String generateOrRefreshToken(User user) {
-        if (user.getAuthToken() != null && !user.getAuthToken().isBlank()) {
-            return user.getAuthToken();
-        }
-        String token = UUID.randomUUID().toString();
-        user.setAuthToken(token);
-        return token;
+        // Sempre gerar um novo JWT com expiração atualizada
+        return jwtUtil.generateToken(user.getId(), user.getEmail());
     }
 
     private String normalize(String value) {

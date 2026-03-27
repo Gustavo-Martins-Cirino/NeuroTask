@@ -52,11 +52,7 @@ public class EnergyController {
         return ResponseEntity.ok(energyService.getPatterns(user));
     }
 
-    private User resolveUser(String authToken) {
-        if (authToken == null || authToken.isBlank()) {
-            throw new RuntimeException("Token de autenticação obrigatório");
-        }
-        return userRepository.findByAuthToken(authToken)
-                .orElseThrow(() -> new RuntimeException("Token de autenticação inválido"));
+       private User resolveUser(String authToken) {
+        return (User) org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

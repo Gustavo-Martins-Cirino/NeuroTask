@@ -46,10 +46,10 @@ public class HabitController {
     }
 
     private User resolveUser(String authToken) {
-        if (authToken == null || authToken.isBlank()) {
-            throw new RuntimeException("Token de autenticação obrigatório");
+        Object principal = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof User) {
+            return (User) principal;
         }
-        return userRepository.findByAuthToken(authToken)
-                .orElseThrow(() -> new RuntimeException("Token de autenticação inválido"));
+        throw new RuntimeException("Token de autenticação inválido");
     }
 }

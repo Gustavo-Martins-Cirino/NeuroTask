@@ -56,8 +56,11 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        User user = userRepository.findByAuthToken(authToken)
-                .orElseThrow(() -> new RuntimeException("Token de autenticação inválido"));
+        Object principal = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!(principal instanceof User)) {
+            throw new RuntimeException("Token de autenticação inválido");
+        }
+        User user = (User) principal;
 
         List<TaskResponseDTO> tasks = taskService.getAllTasks(user);
         return ResponseEntity.ok(tasks); // 200 OK
@@ -92,8 +95,11 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        User user = userRepository.findByAuthToken(authToken)
-                .orElseThrow(() -> new RuntimeException("Token de autenticação inválido"));
+        Object principal = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!(principal instanceof User)) {
+            throw new RuntimeException("Token de autenticação inválido");
+        }
+        User user = (User) principal;
 
         TaskResponseDTO created = taskService.createTask(dto, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -208,8 +214,11 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        User user = userRepository.findByAuthToken(authToken)
-                .orElseThrow(() -> new RuntimeException("Token de autenticação inválido"));
+        Object principal = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!(principal instanceof User)) {
+            throw new RuntimeException("Token de autenticação inválido");
+        }
+        User user = (User) principal;
 
         DashboardSummaryDTO summary = taskService.getDashboardSummary(user.getId());
         return ResponseEntity.ok(summary);

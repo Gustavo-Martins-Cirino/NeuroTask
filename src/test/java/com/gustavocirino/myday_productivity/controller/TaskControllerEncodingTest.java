@@ -55,8 +55,10 @@ class TaskControllerEncodingTest {
         // Simula um usuário autenticado para o token usado no header
         User fakeUser = new User();
         fakeUser.setId(1L);
-        when(userRepository.findByAuthToken("test-token"))
-                .thenReturn(Optional.of(fakeUser));
+        // Como o token JWT agora é validado no filtro e o controlador usa o SecurityContextHolder, 
+        // simulamos a autenticação Spring Security diretamente:
+        org.springframework.security.core.context.SecurityContextHolder.getContext()
+            .setAuthentication(new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(fakeUser, null, java.util.Collections.emptyList()));
 
         when(taskService.createTask(any(), any())).thenReturn(
                 new TaskResponseDTO(

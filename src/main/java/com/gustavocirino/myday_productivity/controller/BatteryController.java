@@ -107,7 +107,13 @@ public class BatteryController {
 
     // ─── Helper ───────────────────────────────────────────────────────────────
 
+      // ─── Helper ───────────────────────────────────────────────────────────────
+
     private User resolveUser(String authToken) {
-        return userRepository.findByAuthToken(authToken).orElse(null);
+        var authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            return (User) authentication.getPrincipal();
+        }
+        return null;
     }
 }

@@ -120,6 +120,10 @@ public class ProcrastinationController {
     // ─── Helper ───────────────────────────────────────────────────────────────
 
     private User resolveUser(String authToken) {
-        return userRepository.findByAuthToken(authToken).orElse(null);
+        Object principal = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof User) {
+            return (User) principal;
+        }
+        return null;
     }
 }

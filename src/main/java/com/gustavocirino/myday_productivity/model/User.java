@@ -27,9 +27,6 @@ public class User {
     @Column(length = 64)
     private String verificationCode;
 
-    @Column(length = 128)
-    private String authToken;
-
     @Column(length = 32)
     private String phoneNumber;
 
@@ -71,14 +68,6 @@ public class User {
 
     public void setVerificationCode(String verificationCode) {
         this.verificationCode = verificationCode;
-    }
-
-    public String getAuthToken() {
-        return authToken;
-    }
-
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
     }
 
     public String getPhoneNumber() {

@@ -1189,6 +1189,24 @@ updateTimerDisplay();
 // Expor globalmente
 if (typeof window !== "undefined") {
   window.startFocusMode = startFocusMode;
+  
+  // Confetti gamification hook
+  window.triggerAchievementGlow = function(taskElement) {
+    if (typeof window.confetti === 'function') {
+      let x = 0.5, y = 0.5;
+      if (taskElement) {
+        const rect = taskElement.getBoundingClientRect();
+        x = (rect.left + rect.width / 2) / window.innerWidth;
+        y = (rect.top + rect.height / 2) / window.innerHeight;
+      }
+      window.confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { x, y },
+        colors: ['#818cf8', '#a78bfa', '#2dd4bf', '#fbbf24']
+      });
+    }
+  };
 }
 
 // Global function to close settings modal
