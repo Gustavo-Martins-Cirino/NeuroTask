@@ -13,6 +13,8 @@ import java.util.Optional;
 @Repository
 public interface ProcrastinationRecordRepository extends JpaRepository<ProcrastinationRecord, Long> {
 
+    void deleteByTaskId(Long taskId);
+
     /** Registro de adiamentos de uma tarefa específica (0 ou 1 por tarefa). */
     Optional<ProcrastinationRecord> findByTaskId(Long taskId);
 

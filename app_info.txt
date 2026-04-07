@@ -1,0 +1,8 @@
+Total lines: 1344
+Imports / setup:
+L44: window.addEventListener("DOMContentLoaded", () => {
+L50: window.addEventListener("focus-mode-start", startFocusTimer);
+L51: window.addEventListener("apenas-comece", startFocusTimer);
+L88: window.addEventListener("DOMContentLoaded", () => {
+L92: window.addEventListener("task-updated", updateQuestMap);
+L94: window.addEventListener("apenas-comece", (e) => {

@@ -1,0 +1,224 @@
+872: .calendar-timeline {
+884: .calendar-timeline::-webkit-scrollbar {
+891: .calendar-timeline::-webkit-scrollbar-track {
+897: .calendar-timeline::-webkit-scrollbar-thumb {
+906: .calendar-timeline::-webkit-scrollbar-thumb:hover {
+1491: #calendarView.view-container.active {
+2624: /* CALENDAR */
+2625: .calendar-panel {
+2637: .calendar-grid {
+2659: .calendar-cell {
+2668: .calendar-cell:hover {
+3017: .habit-calendar-btn {
+3032: .habit-calendar-btn:hover {
+3037: .habit-calendar-popover {
+3052: .habit-calendar-header {
+3063: .habit-calendar-grid {
+3070: .habit-calendar-day-header {
+3078: .habit-calendar-day {
+3093: .habit-calendar-day:hover {
+3099: .habit-calendar-day.completed {
+3106: .habit-calendar-day.today {
+3111: .habit-calendar-day.other-month {
+3116: .habit-calendar-close {
+3133: .habit-calendar-close:hover {
+3603: .habits-timeline .calendar-task-title {
+3607: .habits-timeline .calendar-task-time {
+3612: .habits-timeline-block--compact .calendar-task-time {
+3616: .habits-timeline-block--tiny .calendar-task-title {
+3622: .habits-timeline-block--tiny .calendar-task-time {
+3636: .habits-timeline-block--tiny:hover .calendar-task-time {
+3640: .habits-timeline-block--compact:hover .calendar-task-time {
+3737: .habits-timeline-block.suggest .calendar-task-title {
+3743: .habits-timeline-block.suggest .calendar-task-time {
+5164: /* CALENDAR - Barra de Progresso Diária */
+5165: .calendar-header {
+5173: .calendar-header-top {
+5180: .calendar-header h1 {
+5278: .calendar-controls {
+5323: .calendar-date {
+5349: .calendar-container {
+5363: .calendar-container.view-enter {
+5378: /* WEEKLY GRID (time-based, Google Calendar-like) */
+5565: /* Linha vermelha de "agora" (estilo Google Calendar) */
+5688: /* DAY AGENDA (Calendar + List) */
+5841: .day-view {
+5852: .day-view .hour-slot {
+5863: .day-view .hour-slot:last-child {
+5867: .day-view .hour-slot.drag-over {
+5892: .day-view .hour-slot {
+6227: .calendar-timeline {
+6237: .calendar-error {
+6246: .calendar-hour-row {
+6254: .calendar-hour-row:last-child {
+6258: .calendar-time-label {
+6270: .calendar-event-space {
+6276: .calendar-task {
+6762: .calendar-container,
+7001: .calendar-task:hover {
+7006: .calendar-task-title {
+7019: .calendar-task-time {
+7419: .modal-input[type="time"]::-webkit-calendar-picker-indicator {
+7429: .modal-input[type="time"]:hover::-webkit-calendar-picker-indicator {
+7434: .modal-input[type="time"]::-webkit-calendar-picker-indicator {
+8275: <div class="nav-item active" data-view="calendar" onclick="showView('calendar')">
+8325: <div class="calendar-header">
+8326: <div class="calendar-header-top" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
+8341: <div class="calendar-controls">
+8345: onclick="changeCalendarView('day')"
+8352: onclick="changeCalendarView('week')"
+8359: onclick="changeCalendarView('month')"
+8366: onclick="changeCalendarView('year')"
+8372: <div class="calendar-date">
+8380: <div class="calendar-container">
+8381: <div class="calendar-timeline" id="mainCalendarTimeline">
+8767: <!-- CALENDAR VIEW -->
+8768: <div class="view-container" id="calendarView">
+8769: <div class="calendar-header">
+8777: <div class="calendar-controls">
+8781: onclick="changeCalendarView('day')"
+8788: onclick="changeCalendarView('week')"
+8795: onclick="changeCalendarView('month')"
+8802: onclick="changeCalendarView('year')"
+8808: <div class="calendar-date">
+8813: <div class="calendar-container">
+8814: <div class="calendar-timeline" id="calendarTimeline">
+10634: updateCalendarDateLabel();
+10813: updateCalendarDateLabel();
+10822: updateCalendarDateLabel();
+11572: t.className = "calendar-task-title";
+11585: tm.className = "calendar-task-time";
+11745: t.className = "calendar-task-title";
+11757: tm.className = "calendar-task-time";
+12068: const calendarBtn = document.createElement("button");
+12069: calendarBtn.className = "habit-calendar-btn";
+12070: calendarBtn.innerHTML = `
+12075: calendarBtn.title = "Marcar conclusão manual";
+12076: calendarBtn.onclick = (e) => {
+12078: openHabitCalendar(h.id, h.title, calendarBtn);
+12082: top.appendChild(calendarBtn);
+12526: function updateCalendarDateLabel() {
+12527: const labels = document.querySelectorAll(".calendar-date");
+12533: if (currentCalendarView === "week") {
+12552: if (currentCalendarView === "month") {
+12565: if (currentCalendarView === "year") {
+12579: // CALENDAR VIEW SELECTOR
+12580: let currentCalendarView = "week";
+12581: const CALENDAR_VIEW_STORAGE_KEY = "neurotask.calendar.view";
+12585: const container = document.querySelector(".calendar-container");
+12597: function changeCalendarView(view) {
+12598: currentCalendarView = view;
+12600: localStorage.setItem(CALENDAR_VIEW_STORAGE_KEY, view);
+12627: renderCalendar();
+12628: updateCalendarDateLabel();
+12633: renderCalendar();
+12634: updateCalendarDateLabel();
+12639: renderCalendar();
+12640: updateCalendarDateLabel();
+12645: renderCalendar();
+12646: updateCalendarDateLabel();
+13509: renderCalendar();
+13684: loadTasks().then(() => renderCalendar());
+13944: renderCalendar();
+14130: renderCalendar?.();
+14748: renderCalendar();
+14774: renderCalendar();
+15981: renderCalendar();
+16012: renderCalendar();
+16028: renderCalendar();
+16287: renderCalendar?.();
+17314: renderCalendar();
+17372: * Paleta de cores estilo Google Calendar para tarefas
+17376: const googleCalendarPalette = [
+17389: return googleCalendarPalette[Math.floor(Math.random() * googleCalendarPalette.length)];
+17708: // RENDER CALENDAR
+17709: function renderCalendar() {
+17712: document.getElementById("calendarTimeline"),
+17722: if (currentCalendarView === "day") {
+17723: renderDayAgenda("mainCalendarTimeline");
+17724: renderDayAgenda("calendarTimeline");
+17725: updateCalendarDateLabel();
+17729: if (currentCalendarView === "week") {
+17730: renderWeekCalendar("mainCalendarTimeline");
+17731: renderWeekCalendar("calendarTimeline");
+17732: updateCalendarDateLabel();
+17736: if (currentCalendarView === "month") {
+17737: renderMonthCalendar("mainCalendarTimeline");
+17738: renderMonthCalendar("calendarTimeline");
+17739: updateCalendarDateLabel();
+17743: if (currentCalendarView === "year") {
+17744: renderYearCalendar("mainCalendarTimeline");
+17745: renderYearCalendar("calendarTimeline");
+17746: updateCalendarDateLabel();
+17751: renderCalendarTimeline("mainCalendarTimeline");
+17753: renderCalendarTimeline("calendarTimeline");
+17754: updateCalendarDateLabel();
+17757: ["mainCalendarTimeline", "calendarTimeline"].forEach((id) => {
+17760: container.innerHTML = `<div class="calendar-error">Erro ao renderizar: ${
+17768: // Expor renderCalendar globalmente para o app.js
+17769: window.renderCalendar = renderCalendar;
+17773: function renderWeekCalendar(containerId) {
+17842: // Estilo Google Calendar: altura fixa com scroll vertical.
+18376: renderCalendar();
+18484: renderCalendar();
+18485: updateCalendarDateLabel();
+18535: renderCalendar();
+18536: updateCalendarDateLabel();
+18545: renderCalendar();
+18546: updateCalendarDateLabel();
+18760: function renderMonthCalendar(containerId) {
+18792: renderCalendar();
+18793: updateCalendarDateLabel();
+18800: renderCalendar();
+18801: updateCalendarDateLabel();
+18808: renderCalendar();
+18809: updateCalendarDateLabel();
+19018: changeCalendarView("day");
+19019: renderCalendar();
+19020: updateCalendarDateLabel();
+19034: changeCalendarView("day");
+19035: renderCalendar();
+19036: updateCalendarDateLabel();
+19051: function renderYearCalendar(containerId) {
+19084: changeCalendarView("month");
+19085: renderCalendar();
+19086: updateCalendarDateLabel();
+19173: function renderCalendarTimeline(timelineId) {
+19186: hourRow.className = "calendar-hour-row";
+19190: timeLabel.className = "calendar-time-label";
+19195: eventSpace.className = "calendar-event-space";
+19235: ["mainCalendarTimeline", "calendarTimeline"].forEach((timelineId) => {
+19237: `#${timelineId} .calendar-event-space[data-hour="${startHour}"]`,
+19258: taskDiv.className = "calendar-task";
+19285: titleDiv.className = "calendar-task-title";
+19291: timeDiv.className = "calendar-task-time";
+19348: `#${timelineId} .calendar-event-space[data-hour="${currentHour}"]`,
+19377: renderCalendar();
+20117: renderCalendar();
+21578: return calculateHabitStreakFromCalendar(habitId);
+21613: function getHabitCalendarKey(habitId) {
+21614: return `neurotask.habit.calendar.${habitId}`;
+21617: function getHabitCalendarData(habitId) {
+21619: const data = localStorage.getItem(getHabitCalendarKey(habitId));
+21626: function setHabitCalendarData(habitId, data) {
+21628: localStorage.setItem(getHabitCalendarKey(habitId), JSON.stringify(data));
+21635: const data = getHabitCalendarData(habitId);
+21641: const data = getHabitCalendarData(habitId);
+21644: setHabitCalendarData(habitId, data);
+21652: function calculateHabitStreakFromCalendar(habitId) {
+21670: function openHabitCalendar(habitId, habitTitle, buttonElement) {
+21672: document.querySelectorAll('.habit-calendar-popover').forEach(popover => {
+21677: popover.className = 'habit-calendar-popover';
+21685: header.className = 'habit-calendar-header';
+21688: <button class="habit-calendar-close" onclick="this.parentElement.parentElement.remove()">×</button>
+21694: weekGrid.className = 'habit-calendar-grid';
+21698: dayHeader.className = 'habit-calendar-day-header';
+21715: dayElement.className = 'habit-calendar-day';
+22438: const saved = localStorage.getItem(CALENDAR_VIEW_STORAGE_KEY);
+22446: changeCalendarView(initialView);
+24201: <script type="module" src="/js/modules/calendarView.js?v=20250220"></script>
+24266: if (window.calendarEvents !== undefined && window.calendarEvents !== null) {
+24274: window.calendarEvents.push({
+24283: if (typeof window.renderCalendarGrid === 'function') {
+24284: window.renderCalendarGrid();
+24292: <script type="module" src="/js/modules/calendarView.js?v=20250220"></script>

@@ -9,6 +9,9 @@ import com.gustavocirino.myday_productivity.model.enums.TaskPriority;
 import com.gustavocirino.myday_productivity.model.enums.TaskStatus;
 import com.gustavocirino.myday_productivity.repository.TaskRepository;
 import com.gustavocirino.myday_productivity.repository.UserRepository;
+import com.gustavocirino.myday_productivity.repository.FocusSessionRepository;
+import com.gustavocirino.myday_productivity.repository.ProcrastinationRecordRepository;
+import com.gustavocirino.myday_productivity.repository.TaskCategoryRepository;
 import com.gustavocirino.myday_productivity.dto.DashboardSummaryDTO;
 import com.gustavocirino.myday_productivity.service.ai.ProcrastinationService;
 import lombok.extern.slf4j.Slf4j;
@@ -35,14 +38,24 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final ProcrastinationService procrastinationService;
+    private final FocusSessionRepository focusSessionRepository;
+    private final ProcrastinationRecordRepository procrastinationRecordRepository;
+    private final TaskCategoryRepository taskCategoryRepository;
+
     private static final String DEFAULT_COLOR = "#34a853";
 
     public TaskService(TaskRepository taskRepository,
                        UserRepository userRepository,
-                       @Lazy ProcrastinationService procrastinationService) {
+                       @Lazy ProcrastinationService procrastinationService,
+                       FocusSessionRepository focusSessionRepository,
+                       ProcrastinationRecordRepository procrastinationRecordRepository,
+                       TaskCategoryRepository taskCategoryRepository) {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
         this.procrastinationService = procrastinationService;
+        this.focusSessionRepository = focusSessionRepository;
+        this.procrastinationRecordRepository = procrastinationRecordRepository;
+        this.taskCategoryRepository = taskCategoryRepository;
     }
 
     // ==================== CRUD OPERATIONS ====================
@@ -265,6 +278,14 @@ public class TaskService {
         // Limpar relacionamentos antes de deletar
         task.getTags().clear();
         taskRepository.save(task);
+
+        try {
+            focusSessionRepository.deleteByTaskId(id);
+            procrastinationRecordRepository.deleteByTaskId(id);
+            taskCategoryRepository.deleteByTaskId(id);
+        } catch (Exception e) {
+            log.warn("Erro ao deletar relacionamentos da tarefa ID {}: {}", id, e.getMessage());
+        }
 
         // Agora deletar a task
         taskRepository.deleteById(id);

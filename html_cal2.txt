@@ -1,0 +1,16 @@
+24201:     <script type="module" src="/js/modules/calendarView.js?v=20250220"></script>
+        animation: slideInFromRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      #calendarView.view-container.active {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 64px - 48px);
+        overflow: hidden;
+      }
+
+      #tasksView.view-container.active {
+        display: flex;
+        flex-direction: column;

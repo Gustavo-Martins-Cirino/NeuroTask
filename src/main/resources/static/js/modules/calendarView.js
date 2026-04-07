@@ -251,11 +251,11 @@ export const calendarView = {
   getPriorityColor(priority) {
     switch (priority) {
       case "HIGH":
-        return "#ea4335";
+        return "#ffb3ba";
       case "MEDIUM":
-        return "#fbbc04";
+        return "#ffdfba";
       case "LOW":
-        return "#34a853";
+        return "#baffc9";
       default:
         return "#9ca3af";
     }

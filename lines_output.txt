@@ -1,0 +1,83 @@
+Total lines: 24349
+
+CONTEXT 24270-24360:
+24270:     <!-- Módulos principais NeuroTask (ordem: serviço, calendário, app) -->
+24271:     <script type="module" src="/js/api/taskService.js?v=20250220"></script>
+24272:     <script type="module" src="/js/modules/calendarView.js?v=20250220"></script>
+24273:     <script type="module" src="/js/app.js?v=20250220"></script>
+24274:     <!-- Módulos de IA NeuroTask -->
+24275:     <script type="module" src="/js/modules/aiDashboard.js"></script>
+24276:     <script>
+24277:     window.toggleZenChat = function() {
+24278:       const panel = document.getElementById('zenChatPanel');
+24279:       const chevron = document.getElementById('zenChatChevron');
+24280:       if (panel && panel.classList.contains('expanded')) {
+24281:         panel.classList.remove('expanded');
+24282:         if (chevron) chevron.style.transform = 'rotate(0deg)';
+24283:       } else {
+24284:         if (panel) panel.classList.add('expanded');
+24285:         if (chevron) chevron.style.transform = 'rotate(180deg)';
+24286:       }
+24287:     };
+24288:     
+24289:     window.openDailyNotesModal = function() {
+24290:       let modal = document.getElementById('dailyNotesOverlay');
+24291:       if (!modal) {
+24292:         const html = `
+24293:         <!-- Daily Notes Modal -->
+24294:         <div class="daily-notes-modal-overlay" id="dailyNotesOverlay" onclick="if(event.target===this) closeDailyNotesModal()">
+24295:           <div class="daily-notes-modal">
+24296:              <div class="daily-notes-header">
+24297:                 <div style="display:flex;align-items:center;gap:12px;">
+24298:                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
+24299:                   <span>Notas e Reflexões Diárias</span>
+24300:                 </div>
+24301:                 <button class="icon-btn" style="border:none;background:transparent;" onclick="closeDailyNotesModal()" title="Fechar">×</button>
+24302:              </div>
+24303:              <div class="daily-notes-content">
+24304:                 <textarea placeholder="Para interpretação por IA: Reflexões de Hoje... Como tem sido seu foco? Alguma ideia solta?"></textarea>
+24305:                 <div class="reminders-list">
+24306:                    <div style="font-size:11px; color:var(--text-secondary); margin-bottom:12px; font-weight:700; letter-spacing:0.04em;">LEMBRETES DO DIA</div>
+24307:                    <div class="reminder-item"><div style="width:10px;height:10px;border-radius:50%;background:#34d399;box-shadow:0 0 8px rgba(52,211,153,0.4);"></div> Planejamento Estratégico</div>
+24308:                    <div class="reminder-item"><div style="width:10px;height:10px;border-radius:50%;background:#a78bfa;box-shadow:0 0 8px rgba(167,139,250,0.4);"></div> Sessão de Protótipo de UI</div>
+24309:                    <div class="reminder-item"><div style="width:10px;height:10px;border-radius:50%;background:#fbbf24;box-shadow:0 0 8px rgba(251,191,36,0.4);"></div> Chamada Cliente</div>
+24310:                 </div>
+24311:              </div>
+24312:              <div style="display:flex; justify-content:flex-end; margin-top:24px;">
+24313:                <button class="modal-btn modal-btn-primary" onclick="closeDailyNotesModal(); if(typeof showToast === 'function') showToast('Notas salvas com sucesso!')" style="padding:12px 24px;font-size:14px;border-radius:8px;">Salvar Progresso</button>
+24314:              </div>
+24315:           </div>
+24316:         </div>`;
+24317:         document.body.insertAdjacentHTML('beforeend', html);
+24318:         modal = document.getElementById('dailyNotesOverlay');
+24319:       }
+24320:       if (modal) modal.style.display = 'flex';
+24321:     };
+24322:     
+24323:     window.closeDailyNotesModal = function() {
+24324:       const overlay = document.getElementById('dailyNotesOverlay');
+24325:       if (overlay) overlay.style.display = 'none';
+24326:     };
+24327: 
+24328:     setTimeout(() => {
+24329:       if (typeof window.calendarEvents !== 'undefined') {
+24330:          const today = new Date();
+24331:          const thurs = new Date(today);
+24332:          thurs.setDate(today.getDate() - today.getDay() + 4);
+24333:          const dateStr = window.formatDateLocal ? window.formatDateLocal(thurs) : thurs.toISOString().split('T')[0];
+24334:          
+24335:          window.calendarEvents.push({
+24336:            id: 'ev-prototype-ui-' + Date.now(),
+24337:            title: 'Sessão Protótipo UI',
+24338:            type: 'focus',
+24339:            date: dateStr,
+24340:            startTime: '09:00',
+24341:            endTime: '10:00',
+24342:            color: '#a78bfa'
+24343:          });
+24344:          if (typeof window.renderCalendarGrid === 'function') window.renderCalendarGrid();
+24345:       }
+24346:     }, 1500);
+24347:     </script>
+24348:   </body>
+24349: </html>

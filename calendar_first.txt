@@ -1,0 +1,20 @@
+  else if (hour >= 22 || hour <= 5) energyLevel -= 30; // Noite baixa
+  
+  return Math.min(100, Math.max(20, energyLevel));
+}
+
+export const calendarView = {
+  /**
+   * Renderiza agenda 24h fit-to-screen, slots flexíveis
+   */
+  render(tasks, containerSelector) {
+    const safeTasks = Array.isArray(tasks) ? tasks : [];
+    const container = document.querySelector(containerSelector);
+    if (!container) return;
+
+    // Layout flexível 24h
+    container.innerHTML = '<div class="day-view"></div>';
+    const dayView = container.querySelector(".day-view");
+
+    for (let h = 0; h < 24; h++) {
+      const slot = document.createElement("div");

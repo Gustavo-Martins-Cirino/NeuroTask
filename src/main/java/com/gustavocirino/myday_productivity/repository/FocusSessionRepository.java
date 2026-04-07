@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface FocusSessionRepository extends JpaRepository<FocusSession, Long> {
 
+    void deleteByTaskId(Long taskId);
+
     List<FocusSession> findByUserIdAndStatusOrderByStartedAtDesc(Long userId, FocusSessionStatus status);
 
     Optional<FocusSession> findFirstByUserIdAndStatusOrderByStartedAtDesc(Long userId, FocusSessionStatus status);

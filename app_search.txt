@@ -1,0 +1,100 @@
+   window.toggleElderlyMode = toggleElderlyMode;
+ }
+
+// ==================== RENDERIZAÇÃO BÁSICA ====================
+
+async function refreshTasksAndCalendar() {
+  const updatedTasks = await taskService.getAllTasks();
+  if (typeof window !== "undefined") {
+    window.tasks = updatedTasks;
+  }
+  if (typeof window.loadTasks === "function") {
+    window.loadTasks();
+  }
+}
+
+// Expor apenas refreshTasksAndCalendar globalmente
+if (typeof window !== "undefined") {
+  window.refreshTasksAndCalendar = refreshTasksAndCalendar;
+}
+
+// ==================== CRIAÇÃO DE TAREFAS VIA MODAL ====================
+
+export async function addTaskFromModal() {
+  // Coleta dados do modal de tarefa (IDs devem existir no index.html)
+  const titleEl =
+    document.getElementById("task-title") ||
+    document.getElementById("modalTaskTitle");
+  const descEl =
+    document.getElementById("task-desc") ||
+    document.getElementById("modalTaskDesc");
+
+  // Prioridade: primeiro tenta um campo oculto padronizado, depois cai no selectedPriority global
+  const priorityHidden = document.getElementById("task-priority");
+
+  // Se os campos principais não existirem, retorna erro amigável
+  if (!titleEl || !descEl) {
+    alert(
+      "❌ Não foi possível localizar o formulário de tarefa na tela. Atualize a página e tente novamente.",
+    );
+    return;
+  }
+
+  const title = titleEl.value?.trim();
+  const description = descEl.value || "";
+  let priority = "MEDIUM";
+  if (priorityHidden && priorityHidden.value) {
+    priority = priorityHidden.value;
+  } else if (typeof window.selectedPriority === "string") {
+    priority = window.selectedPriority;
+  }
+
+  // Coleta data e horários
+  const dateEl = document.getElementById("modalTaskDate");
+  const startTimeEl = document.getElementById("modalStartTime");
+  const endTimeEl = document.getElementById("modalEndTime");
+
+  let taskDate = dateEl?.value || "";
+  if (!taskDate) {
+    const today = new Date();
+    taskDate = today.toISOString().split("T")[0]; // Formato YYYY-MM-DD
+  }
+
+  const startTime = startTimeEl?.value || "";
+  const endTime = endTimeEl?.value || "";
+
+  // Verificação de token ANTES de qualquer validação
+  const token = localStorage.getItem("neurotask_token");
+  if (!token) {
+    alert("❌ Sessão expirada. Faça login novamente.");
+    if (typeof window.showAuthView === "function") {
+      window.showAuthView("login");
+    }
+    return;
+  }
+
+  if (!title) {
+    alert("❌ Informe um título para a tarefa.");
+    return;
+  }
+
+  console.log("Iniciando salvamento...");
+
+  // Monta payload no mesmo formato que a IA usa
+  const payload = {
+    title,
+    description,
+    priority,
+  };
+
+  // Se tem horário, adiciona startTime/endTime no formato ISO completo
+  // O backend define o status automaticamente (SCHEDULED se tiver horários, PENDING se não)
+  if (startTime && endTime) {
+    payload.startTime = `${taskDate}T${startTime}:00`;
+    payload.endTime = `${taskDate}T${endTime}:00`;
+  }
+
+  console.log("Dados enviados:", payload);
+
+  try {
+    const createdTask = await taskService.createTask(payload);

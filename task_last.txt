@@ -1,0 +1,30 @@
+      }),
+      body: JSON.stringify({ message }),
+    });
+    if (!response.ok) {
+      handleAuthFailure(response.status);
+      throw new Error("Erro no chat");
+    }
+    return response.json();
+  },
+
+  /**
+   * GET /api/tasks/dashboard - Resumo do dashboard (carga cognitiva)
+   */
+  async getDashboardSummary() {
+    const token = getAuthToken();
+    if (!token) {
+      alert("Faça login para visualizar seu dashboard personalizado.");
+      throw new Error("Usuário não autenticado");
+    }
+
+    const response = await fetchWithRetry(`${API_BASE}/tasks/dashboard`, {
+      headers: getAuthHeaders(),
+    });
+    if (!response.ok) {
+      handleAuthFailure(response.status);
+      throw new Error("Erro ao buscar resumo de carga cognitiva");
+    }
+    return response.json();
+  },
+};

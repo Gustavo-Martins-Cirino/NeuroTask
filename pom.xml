@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.gustavocirino</groupId>
 	<artifactId>myday-productivity</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>myday-productivity</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
@@ -34,25 +34,31 @@
 	</properties>
 	<dependencies>
 
+		<!-- Endpoint de Observabilidade e Monitoramento de Saúde da Aplicação -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
+		<!-- Persistência de Dados e JPA/Hibernate -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
+		<!-- Validação de DTOs e Requisições -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
+
+		<!-- Servidor Web Embutido (Tomcat) e Framework REST -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- E-mail (verificação de conta) -->
+		<!-- E-mail (verificação de conta / notificações) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
@@ -139,11 +145,14 @@
 			<version>1.78.1</version>
 		</dependency>
 		
+		<!-- Ferramenta de redução de boilerplate (Getters/Setters implícitos em Objetos não-Entidade) -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+
+		<!-- Testes Unitários e de Integração do Spring Boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

@@ -1,0 +1,30 @@
+/**
+ * Task Service - Camada de comunicação com a API REST
+ * Encapsula todas as chamadas HTTP usando Fetch API nativa
+ */
+
+const API_BASE = "/api";
+
+function getAuthToken() {
+  try {
+    return localStorage.getItem("neurotask_token");
+  } catch (e) {
+    return null;
+  }
+}
+
+function handleAuthFailure(status) {
+  if (status === 401) {
+    try {
+      localStorage.removeItem("neurotask_token");
+    } catch {}
+    try {
+      if (
+        typeof window !== "undefined" &&
+        typeof window.showAuthView === "function"
+      ) {
+        window.showAuthView("login");
+      }
+    } catch {
+      // ignore UI fallback errors
+    }

@@ -1,0 +1,20 @@
+      default:
+        return "#9ca3af";
+    }
+  },
+
+  createPriorityDot(priority) {
+    const dot = document.createElement("span");
+    dot.className = "priority-dot";
+    dot.style.display = "inline-block";
+    dot.style.width = "10px";
+    dot.style.height = "10px";
+    dot.style.borderRadius = "50%";
+    dot.style.marginRight = "6px";
+    dot.style.background = this.getPriorityColor(priority);
+    dot.style.flexShrink = "0";
+    dot.style.border = "1.5px solid rgba(255,255,255,0.85)";
+    dot.style.boxShadow = "0 0 0 1px rgba(0,0,0,0.35)"; // subtle ring for contrast
+    return dot;
+  },
+};
