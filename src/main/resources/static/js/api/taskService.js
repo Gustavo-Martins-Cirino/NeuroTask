@@ -187,6 +187,12 @@ export const taskService = {
       handleAuthFailure(response.status);
       throw new Error("Erro ao completar tarefa");
     }
+    
+    // Gamification hook
+    if (typeof window.addXP === 'function') {
+      window.addXP(20);
+    }
+    
     return response.json();
   },
 

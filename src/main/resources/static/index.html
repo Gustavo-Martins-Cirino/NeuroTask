@@ -31,6 +31,7 @@
     ></script>
     
     <style>
+      /* v1.0.1 - Fix Visual */
 
       @keyframes ntSpin {
         from {
@@ -42,24 +43,24 @@
       }
 
       :root {
-        /* Fase 2.0 - Paleta (Dark com Acentos) */
-        --primary: #818cf8;
-        --primary-light: #a5b4fc;
-        --primary-dark: #6366f1;
-        --accent: #6366f1;
-        --accent-soft: rgba(99, 102, 241, 0.15);
-        --accent-glow: 0 0 20px rgba(99, 102, 241, 0.25);
+        /* Fase 2.0 - Paleta (Dark com Acentos - Padrão Linear/Cron) */
+        --primary: #ffffff;
+        --primary-light: #e0e0e0;
+        --primary-dark: #a0a0a0;
+        --accent: #ffffff;
+        --accent-soft: rgba(255, 255, 255, 0.15);
+        --accent-glow: 0 0 20px rgba(255, 255, 255, 0.1);
         --success: #34d399;
         --warning: #fbbf24;
         --danger: #f87171;
         --purple: #a78bfa;
         --teal: #2dd4bf;
         
-        /* Backgrounds */
-        --bg-main: #10141C;
-        --bg-sidebar: #10141C;
-        --bg-card: #10141C;
-        --bg-glass: #10141C;
+        /* Backgrounds (Preto Puro e Cinzas Neutros) */
+        --bg-main: #0f0f0f;
+        --bg-sidebar: #0f0f0f;
+        --bg-card: #1a1a1a;
+        --bg-glass: #1a1a1a;
         
         /* Texto */
         --text-primary: #e5e7eb;
@@ -67,19 +68,68 @@
         --text-muted: #64748b;
         
         /* Bordas e sombras */
-        --border-color: rgba(148, 163, 184, 0.1);
-        --hover-bg: rgba(148, 163, 184, 0.08);
+        --border-color: #2e2e2e;
+        --hover-bg: rgba(255, 255, 255, 0.05);
         --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        --glass-border: rgba(148, 163, 184, 0.1);
+        --glass-border: #2e2e2e;
         
         /* Gradientes */
-        --gradient-primary: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, #131520 100%);
+        --gradient-primary: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, #0f0f0f 100%);
         --gradient-card: linear-gradient(
           145deg,
-          rgba(99, 102, 241, 0.05),
-          rgba(148, 163, 184, 0.02)
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
         );
       }
+
+      /* Layout e transicoes Linear/Cron */
+      #sidebar { transition: transform 0.3s ease, width 0.3s ease, min-width 0.3s ease, opacity 0.3s ease; }
+      #sidebar.collapsed { transform: translateX(-100%); width: 0 !important; min-width: 0 !important; opacity: 0; padding: 0 !important; overflow: hidden; border: none; }
+      .main-content { transition: margin-left 0.3s ease, width 0.3s ease; }
+      .main-content.expanded { margin-left: 0; width: 100%; }
+
+      .right-panel, .context-panel, .neuro-chat-panel, #rightPanel { transition: transform 0.3s ease, width 0.3s ease, min-width 0.3s ease, opacity 0.3s ease; }
+      .right-panel.collapsed, .context-panel.collapsed, .neuro-chat-panel.collapsed, #rightPanel.collapsed { transform: translateX(100%); width: 0 !important; min-width: 0 !important; opacity: 0; padding: 0 !important; overflow: hidden; border: none; }
+
+      /* XP Bar */
+      .xp-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-right: 20px;
+      }
+      .xp-track {
+        width: 120px;
+        height: 6px;
+        background: var(--border-color);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .xp-fill {
+        height: 100%;
+        background: var(--success);
+        transition: width 0.4s ease;
+        width: 0%;
+      }
+      .xp-text {
+        font-size: 12px;
+        color: var(--text-secondary);
+        font-weight: 600;
+      }
+
+      .panel-toggle-btn {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+      }
+      .panel-toggle-btn:hover { background: var(--hover-bg); }
 
       /* ══════════════════════════════════════════════════════
          NEUROTASK AI DASHBOARD ? Cards de IA (Bateria,
@@ -472,9 +522,11 @@
         width: 28px;
         height: 28px;
         display: block;
-      }
-      .dark-mode .app-logo-icon {
+        /* Torna branco por padrao no dark mode */
         filter: brightness(0) invert(1);
+      }
+      body.light-mode .app-logo-icon {
+        filter: none; /* Em light mode usa a cor original */
       }
 
       .app-title {
@@ -4680,6 +4732,7 @@
 
       .calendar-header h1 {
         margin: 0;
+        margin-left: 60px !important;
       }
       
       .daily-progress-bar {
@@ -5270,8 +5323,7 @@
 
       .day-timeline-content {
         position: relative;
-        min-height: 1500px;
-        padding-bottom: 150px;
+        padding-bottom: 16px;
       }
 
       .day-timeline-overlay {
@@ -7720,36 +7772,123 @@
       .reminders-list { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
       .reminder-item { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-primary); }
       .reminder-item:last-child { border-bottom: none; }
-    </style>
+
+      /* RESET FINAL DE BORDAS NEUROTASK */
+      body:not(.light-mode) .week-hour-slot-bg, 
+      body:not(.light-mode) .calendar-cell, 
+      body:not(.light-mode) .hour-row, 
+      body:not(.light-mode) .time-slot,
+      body:not(.light-mode) .day-hour-row,
+      body:not(.light-mode) .calendar-hour-row,
+      body:not(.light-mode) .week-time-label,
+      body:not(.light-mode) .calendar-time-label {
+         border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+         border-top: none !important;
+         border-left: none !important;
+      }
+      
+      body.light-mode .week-hour-slot-bg, 
+      body.light-mode .calendar-cell, 
+      body.light-mode .hour-row, 
+      body.light-mode .time-slot,
+      body.light-mode .day-hour-row,
+      body.light-mode .calendar-hour-row,
+      body.light-mode .week-time-label,
+      body.light-mode .calendar-time-label {
+         border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+         border-top: none !important;
+         border-left: none !important;
+      }
+      
+      body:not(.light-mode) .day-column, 
+      body:not(.light-mode) .calendar-day-col,
+      body:not(.light-mode) .week-day-column,
+      body:not(.light-mode) .calendar-day {
+         border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+         background: transparent !important;
+      }
+      
+      body.light-mode .day-column, 
+      body.light-mode .calendar-day-col,
+      body.light-mode .week-day-column,
+      body.light-mode .calendar-day {
+         border-right: 1px solid rgba(0, 0, 0, 0.05) !important;
+         background: transparent !important;
+      }
+
+      /* Linha da hora atual vibrante (#ff4500) */
+      body:not(.light-mode) .current-time-line {
+        background: #ff4500 !important;
+        box-shadow: 0 0 10px rgba(255, 69, 0, 0.7) !important;
+      }
+      body:not(.light-mode) .current-time-line::before {
+        background: #ff4500 !important;
+        border-color: transparent !important;
+      }
+      
+      /* week layout defaults that shouldn't mess up borders */
+      .week-hour-slot-bg {
+          width: 100% !important;
+          height: var(--week-hour-height);
+          box-sizing: border-box;
+          pointer-events: none;
+          z-index: 1;
+          box-shadow: none !important;
+          background: transparent !important;
+      }
+      .week-body-grid {
+          background: transparent !important;
+      }
+</style>
   </head>
   <body>
     <!-- TOAST CONTAINER -->
     <div class="toast-container" id="toastContainer"></div>
+
+    <!-- GLOBAL NAV TOGGLE -->
+    <button id="globalNavToggle" class="panel-toggle-btn" onclick="toggleLeftMenu()" title="Alternar Menu" style="position: fixed; top: 22px; left: 16px; z-index: 1000; background: var(--bg-card); border:1px solid var(--border-color); color:var(--text-primary); padding:6px; border-radius:6px; cursor:pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      <svg id="navToggleIcon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+
+    <!-- GLOBAL HEADER ACTIONS -->
+    <div class="global-header-actions" style="position: fixed; top: 16px; right: 16px; z-index: 1000; display: flex; gap: 8px; align-items: center;">
+      <div class="xp-container" style="display:flex; align-items:center; gap:10px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <span class="xp-text" id="xp-text" style="font-size:12px; color:#94a3b8; font-weight:600;">Lvl 1 - 0/100 XP</span>
+        <div class="xp-track" style="width:60px; height:6px; background:#2e2e2e; border-radius:4px; overflow:hidden;">
+           <div class="xp-fill" id="xp-fill" style="height:100%; width:0%; background:#34d399; transition: width 0.4s ease;"></div>
+        </div>
+      </div>
+      <button class="icon-btn" id="darkModeToggle" type="button" title="Alternar tema" onclick="toggleDarkMode()" style="width:36px; height:36px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 50%; color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <!-- Icon injected by JS -->
+        <svg id="themeIconSun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg id="themeIconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      <button class="panel-toggle-btn" onclick="toggleRightPanel()" title="Painel Contextual" style="background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-primary); padding:8px; border-radius:8px; cursor:pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
 
     <!-- APP CONTAINER WRAPPER -->
     <div class="app-container">
 
     <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
-      <div class="sidebar-header" style="display:flex;align-items:center;justify-content:space-between;padding:24px 16px 16px;">
-        <div class="app-brand">
+      <div class="sidebar-header" style="display:flex;align-items:center;justify-content:space-between;padding:24px 16px 16px 54px;">
+        <div class="app-brand" style="display:flex; align-items:center; gap:8px;">
           <img src="/img/brain.svg" alt="NeuroTask" class="app-logo-icon" />
           <span class="app-title" style="font-size:18px;">NeuroTask</span>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <button class="icon-btn" id="darkModeToggle" type="button" title="Alternar tema" onclick="toggleDarkMode()" style="width:32px;height:32px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon">
-              <circle cx="12" cy="12" r="5"></circle>
-              <line x1="12" y1="1" x2="12" y2="3"></line>
-              <line x1="12" y1="21" x2="12" y2="23"></line>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-              <line x1="1" y1="12" x2="3" y2="12"></line>
-              <line x1="21" y1="12" x2="23" y2="12"></line>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-            </svg>
-          </button>
         </div>
       </div>
       <div class="nav-menu">
@@ -7859,7 +7998,7 @@
       <div class="view-container active" id="tasksView">
         <div class="calendar-header">
           <div class="calendar-header-top">
-            <h1 style="font-family: &quot;Google Sans&quot;; display: flex; align-items: center; gap: 10px;">
+            <h1 style="font-family: &quot;Google Sans&quot;; display: flex; align-items: center; gap: 10px; margin-left: 50px;">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                 <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -8209,13 +8348,15 @@
       <!-- CALENDAR VIEW -->
       <div class="view-container" id="calendarView">
         <div class="calendar-header">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
-          <span>Meu Dia - Time Blocking</span>
+          <h1 style="font-family: &quot;Google Sans&quot;; display: flex; align-items: center; gap: 10px; margin-left: 50px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span>Meu Dia - Time Blocking</span>
+          </h1>
           <div class="calendar-controls">
             <div class="view-selector">
               <button
@@ -9107,27 +9248,6 @@
           </div>
         </div>
 
-        <!-- Zen AI Chat Panel -->
-        <div class="zen-chat-panel" id="zenChatPanel">
-          <div class="zen-chat-header" style="cursor: pointer;" onclick="toggleZenChat()">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
-              <span>Zen-AI Assistente</span>
-            </div>
-            <svg id="zenChatChevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          </div>
-          <div class="zen-chat-body">
-            <div class="zen-chat-quick-btns">
-               <button class="zen-quick-btn"><span>✨</span> Otimize meu dia</button>
-               <button class="zen-quick-btn"><span>☕</span> Sugira um intervalo</button>
-               <button class="zen-quick-btn"><span>📝</span> Resuma minhas notas</button>
-            </div>
-            <div class="zen-chat-input-wrapper">
-               <input type="text" placeholder="Pergunte ao assistente..." />
-               <button class="icon-btn" style="width:38px;height:38px;background:var(--primary);color:white;border:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
-            </div>
-          </div>
-        </div>
       </aside>
     </div> <!-- END app-container -->
 
@@ -9793,8 +9913,8 @@
           />
           <span>Neuro IA</span>
         </div>
-        <button class="close-chat" onclick="closeAIChat()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <button class="close-chat close-chat-btn" onclick="closeAIChat()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <line x1="18" y1="6" x2="6" y2="18" stroke-width="2.5"></line>
             <line x1="6" y1="6" x2="18" y2="18" stroke-width="2.5"></line>
           </svg>
@@ -12882,7 +13002,7 @@
           const chatHeader = chatPanel.querySelector('.chat-header');
           if (chatHeader) {
             closeBtn = document.createElement('button');
-            closeBtn.className = 'close-chat';
+            closeBtn.className = 'close-chat close-chat-btn';
             closeBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="opacity: 1 !important;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
             closeBtn.onclick = closeAIChat;
             closeBtn.style.cssText = 'position: absolute; right: 15px; top: 20px; z-index: 9999; cursor: pointer; width: 32px; height: 32px; border: none; background: transparent; color: var(--text-primary); border-radius: 50%; display: flex !important; align-items: center; justify-content: center; opacity: 1 !important; visibility: visible !important;';
@@ -15423,6 +15543,9 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
                 return;
               }
 
+              const userId = (typeof currentUser !== 'undefined' && currentUser && currentUser.id) ? currentUser.id : "qa@neurotask.com";
+              console.log('Tentando buscar tarefas para o User ID:', userId);
+
               // Força bypass de cache para refletir exclusões/edições imediatamente
               const response = await fetch(`${API_URL}/tasks`, {
                 cache: "no-store",
@@ -17360,7 +17483,19 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
           const day = new Date(start);
           day.setDate(start.getDate() + i);
           const column = document.createElement("div");
-          column.className = "week-day-column";
+            column.className = "week-day-column";
+
+            // INJECT HORIZONTAL LINES
+            for (let bg = startHour; bg <= endHour; bg++) {
+              const bgSlot = document.createElement("div");
+              bgSlot.className = "week-hour-slot-bg";
+              // absolute positioning creates visually perfect alignment
+              bgSlot.style.position = "absolute";
+              bgSlot.style.left = "0";
+              bgSlot.style.right = "0";
+              bgSlot.style.top = bg * 44 + "px"; // 44px is hourHeight in week view
+              column.appendChild(bgSlot);
+            }
           if (day.getDay() === 0 || day.getDay() === 6) {
             column.classList.add("weekend");
           }
@@ -22835,17 +22970,6 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
     <!-- Módulos de IA NeuroTask -->
     <script type="module" src="/js/modules/aiDashboard.js"></script>
     <script>
-window.toggleZenChat = function() {
-  const panel = document.getElementById('zenChatPanel');
-  const chevron = document.getElementById('zenChatChevron');
-  if (panel.classList.contains('expanded')) {
-    panel.classList.remove('expanded');
-    chevron.style.transform = 'rotate(0deg)';
-  } else {
-    panel.classList.add('expanded');
-    chevron.style.transform = 'rotate(180deg)';
-  }
-};
 window.openDailyNotesModal = function() {
   let modal = document.getElementById('dailyNotesOverlay');
   if (!modal) {
@@ -22904,8 +23028,97 @@ setTimeout(() => {
   }
 }, 1500);
     </script>
+    <script>
+      // v1.0.1 - Fix Visual
+      // ==================== GAMIFICATION XP & NAV TOGGLES ====================
+      window.addXP = function(amount) {
+        let xp = parseInt(localStorage.getItem('neurotask_xp') || '0');
+        xp += amount;
+        localStorage.setItem('neurotask_xp', xp);
+        window.updateXPBar(xp);
+      }
+
+      window.updateXPBar = function(xp) {
+        const xpBar = document.getElementById('xp-fill');
+        const xpText = document.getElementById('xp-text');
+        if (xpBar && xpText) {
+          let level = Math.floor(xp / 100) + 1;
+          let currentLevelXP = xp % 100;
+          xpBar.style.width = currentLevelXP + '%';
+          xpText.innerText = 'Lvl ' + level + ' - ' + currentLevelXP + '/100 XP';
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        window.updateXPBar(parseInt(localStorage.getItem('neurotask_xp') || '0'));
+      });
+
+      window.toggleLeftMenu = function() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+          const isCollapsed = sidebar.classList.toggle('collapsed');
+          const mainContent = document.querySelector('.main-content');
+          if (mainContent) mainContent.classList.toggle('expanded');
+          
+          const iconBtn = document.getElementById('globalNavToggle');
+          if (iconBtn) {
+            if (isCollapsed) {
+              iconBtn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+            } else {
+              iconBtn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+            }
+          }
+        }
+      }
+
+      window.toggleRightPanel = function() {
+        const rightPanels = document.querySelectorAll('.right-panel, .context-panel, .neuro-chat-panel, #rightPanel');
+        let isCollapsed = false;
+        rightPanels.forEach(p => {
+          isCollapsed = p.classList.toggle('collapsed');
+        });
+        
+        // Botão na "Navbar"
+        const toggleBtnNodes = document.querySelectorAll('.panel-toggle-btn[onclick="toggleRightPanel()"]');
+        toggleBtnNodes.forEach(btn => {
+          if (isCollapsed) {
+            btn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+          } else {
+            btn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+          }
+        });
+      }
+
+      window.toggleDarkMode = function() {
+        document.body.classList.toggle('light-mode');
+        const isLight = document.body.classList.contains('light-mode');
+        localStorage.setItem('neurotask_theme', isLight ? 'light' : 'dark');
+        
+        const sun = document.getElementById('themeIconSun');
+        const moon = document.getElementById('themeIconMoon');
+        if (sun && moon) {
+          sun.style.display = isLight ? 'block' : 'none';
+          moon.style.display = isLight ? 'none' : 'block';
+        }
+      }
+
+      // Initialize theme based on preference
+      document.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('neurotask_theme');
+        if (savedTheme === 'light') {
+          document.body.classList.add('light-mode');
+          const sun = document.getElementById('themeIconSun');
+          const moon = document.getElementById('themeIconMoon');
+          if (sun && moon) {
+            sun.style.display = 'block';
+            moon.style.display = 'none';
+          }
+        }
+      });
+    </script>
   </body>
 </html>
+
 
 
 
