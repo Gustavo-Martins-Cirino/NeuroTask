@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#050505" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:;" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.groq.com http://localhost:8080 wss://localhost:8080; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:;" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
@@ -88,8 +88,9 @@
       .main-content { transition: margin-left 0.3s ease, width 0.3s ease; }
       .main-content.expanded { margin-left: 0; width: 100%; }
 
-      .right-panel, .context-panel, .neuro-chat-panel, #rightPanel { transition: transform 0.3s ease, width 0.3s ease, min-width 0.3s ease, opacity 0.3s ease; }
+      .right-panel, .context-panel, .neuro-chat-panel, #rightPanel { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease, min-width 0.3s ease, opacity 0.3s ease; }
       .right-panel.collapsed, .context-panel.collapsed, .neuro-chat-panel.collapsed, #rightPanel.collapsed { transform: translateX(100%); width: 0 !important; min-width: 0 !important; opacity: 0; padding: 0 !important; overflow: hidden; border: none; }
+      .right-panel.context-panel-minimized { transform: translateY(calc(100% - 73px)); box-shadow: none; border-color: var(--border-color); }
 
       /* XP Bar */
       .xp-container {
@@ -4732,7 +4733,7 @@
 
       .calendar-header h1 {
         margin: 0;
-        margin-left: 60px !important;
+        padding-left: 30px; /* Levemente deslocado para a direita */
       }
       
       .daily-progress-bar {
@@ -7748,7 +7749,7 @@
       .reschedule-dismiss-btn:hover { color: var(--text-primary); border-color: var(--text-secondary); }
 
       .app-container { display: flex; height: 100vh; overflow: hidden; background: var(--bg-main); }
-      .right-panel { width: 340px; flex-shrink: 0; background: var(--bg-main); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; overflow-y: auto; }
+      .right-panel { width: 340px; background: var(--bg-main); border: 1px solid var(--border-color); border-bottom: none; display: flex; flex-direction: column; overflow-y: auto; position: fixed; bottom: 0; right: 24px; z-index: 1000; height: 60vh; border-radius: 12px 12px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.4); }
       .center-panel { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
 
       .zen-chat-panel { border-top: 1px solid var(--border-color); display: flex; flex-direction: column; margin-top: auto; }
@@ -7839,53 +7840,42 @@
       .week-body-grid {
           background: transparent !important;
       }
+
+      .circular-avatar {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          overflow: hidden;
+          display: block;
+          border: 2px solid var(--border-color);
+          transition: transform 0.2s ease, border-color 0.2s ease;
+          cursor: pointer;
+          flex-shrink: 0;
+      }
+
+      .circular-avatar img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+      }
+      
+      .circular-avatar:hover {
+          transform: scale(1.05);
+          border-color: var(--teal);
+      }
 </style>
   </head>
   <body>
     <!-- TOAST CONTAINER -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- GLOBAL NAV TOGGLE -->
-    <button id="globalNavToggle" class="panel-toggle-btn" onclick="toggleLeftMenu()" title="Alternar Menu" style="position: fixed; top: 22px; left: 16px; z-index: 1000; background: var(--bg-card); border:1px solid var(--border-color); color:var(--text-primary); padding:6px; border-radius:6px; cursor:pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-      <svg id="navToggleIcon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-    </button>
-
-    <!-- GLOBAL HEADER ACTIONS -->
-    <div class="global-header-actions" style="position: fixed; top: 16px; right: 16px; z-index: 1000; display: flex; gap: 8px; align-items: center;">
-      <div class="xp-container" style="display:flex; align-items:center; gap:10px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <span class="xp-text" id="xp-text" style="font-size:12px; color:#94a3b8; font-weight:600;">Lvl 1 - 0/100 XP</span>
-        <div class="xp-track" style="width:60px; height:6px; background:#2e2e2e; border-radius:4px; overflow:hidden;">
-           <div class="xp-fill" id="xp-fill" style="height:100%; width:0%; background:#34d399; transition: width 0.4s ease;"></div>
-        </div>
-      </div>
-      <button class="icon-btn" id="darkModeToggle" type="button" title="Alternar tema" onclick="toggleDarkMode()" style="width:36px; height:36px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 50%; color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <!-- Icon injected by JS -->
-        <svg id="themeIconSun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-        <svg id="themeIconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </button>
-      <button class="panel-toggle-btn" onclick="toggleRightPanel()" title="Painel Contextual" style="background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-primary); padding:8px; border-radius:8px; cursor:pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
-    </div>
-
     <!-- APP CONTAINER WRAPPER -->
     <div class="app-container">
 
     <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
-      <div class="sidebar-header" style="display:flex;align-items:center;justify-content:space-between;padding:24px 16px 16px 54px;">
+      <div class="sidebar-header" style="display:flex;align-items:center;justify-content:space-between;padding:24px 16px 16px;">
         <div class="app-brand" style="display:flex; align-items:center; gap:8px;">
           <img src="/img/brain.svg" alt="NeuroTask" class="app-logo-icon" />
           <span class="app-title" style="font-size:18px;">NeuroTask</span>
@@ -7994,20 +7984,72 @@
 
     <!-- MAIN CONTENT -->
     <div class="main-content" id="mainContent">
+      
+      <!-- TOP BAR -->
+      <header class="top-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background: var(--bg-main); border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: sticky; top: 0; z-index: 1000; width: 100%; box-sizing: border-box;">
+        
+        <!-- ÁREA ESQUERDA: Contexto/Brand -->
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <!-- Hambúrguer Toggle (Mantido à esquerda) -->
+          <button id="globalNavToggle" class="panel-toggle-btn" onclick="toggleLeftMenu()" title="Alternar Menu" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-primary); padding: 6px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;">
+            <svg id="navToggleIcon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          
+          <h1 style="font-family: 'Google Sans', sans-serif; display: flex; align-items: center; gap: 10px; margin: 0; font-size: 20px; font-weight: 500; color: var(--text-primary);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--teal);">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span>Meu Dia - Time Blocking</span>
+          </h1>
+        </div>
+
+        <!-- ÁREA DIREITA: Controles de usuário -->
+        <div style="display: flex; align-items: center; gap: 24px;">
+          
+          <!-- Botão Sol/Lua -->
+          <button class="icon-btn" id="darkModeToggle" type="button" title="Alternar tema" onclick="toggleDarkMode()" style="background: transparent; border: none; color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; padding: 0;">
+            <svg id="themeIconSun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg id="themeIconMoon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+
+          <!-- Nível / XP -->
+          <div class="xp-container" style="display: flex; align-items: center; gap: 8px;">
+            <span class="xp-text" id="xp-text" style="font-size: 13px; color: var(--text-primary); font-weight: 600; white-space: nowrap;">Lvl 1 - 0/100 XP</span>
+            <div class="xp-track" style="width: 50px; height: 4px; background: var(--hover-bg); border-radius: 2px; overflow: hidden;">
+              <div class="xp-fill" id="xp-fill" style="height: 100%; width: 0%; background: var(--success); transition: width 0.4s ease;"></div>
+            </div>
+          </div>
+
+          <!-- Foto de Perfil -->
+          <div class="profile-avatar circular-avatar" onclick="openProfileModal()" style="width: 36px; height: 36px; border-radius: 50%; overflow: hidden; border: 2px solid var(--border-color); flex-shrink: 0; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.borderColor='var(--teal)';" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='var(--border-color)';">
+            <img id="header-user-avatar-image" src="image_12.png" onerror="this.onerror=null; this.src='image_12.png';" alt="User Avatar" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+          </div>
+
+          <!-- Botão oculto p/ evitar quebrar javascript de PainelContextual se existir -->
+          <button class="panel-toggle-btn hidden" onclick="toggleRightPanel()" id="hiddenRightPanelBtn" style="display:none;"></button>
+        </div>
+      </header>
+
       <!-- TASKS VIEW -->
       <div class="view-container active" id="tasksView">
         <div class="calendar-header">
-          <div class="calendar-header-top">
-            <h1 style="font-family: &quot;Google Sans&quot;; display: flex; align-items: center; gap: 10px; margin-left: 50px;">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                <line x1="3" y1="10" x2="21" y2="10"></line>
-              </svg>
-              <span>Meu Dia - Time Blocking</span>
-            </h1>
-            <div class="calendar-controls">
+          <div class="calendar-header-top" style="display: flex; justify-content: flex-end; align-items: center; width: 100%; padding-top: 16px;">
+            <div class="calendar-controls" style="display: flex; gap: 16px; align-items: center;">
             <div class="view-selector">
               <button
                 class="view-btn"
@@ -8347,17 +8389,8 @@
 
       <!-- CALENDAR VIEW -->
       <div class="view-container" id="calendarView">
-        <div class="calendar-header">
-          <h1 style="font-family: &quot;Google Sans&quot;; display: flex; align-items: center; gap: 10px; margin-left: 50px;">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            <span>Meu Dia - Time Blocking</span>
-          </h1>
-          <div class="calendar-controls">
+        <div class="calendar-header" style="display: flex; justify-content: flex-end; align-items: center; width: 100%; padding-top: 16px;">
+          <div class="calendar-controls" style="display: flex; gap: 16px; align-items: center;">
             <div class="view-selector">
               <button
                 class="view-btn"
@@ -9234,12 +9267,17 @@
     </div>
 
     <!-- RIGHT PANEL -->
-      <aside class="right-panel">
-        <div class="right-panel-header" style="padding: 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color);">
-           <span style="font-family:'Google Sans';font-weight:600;font-size:15px;color:var(--text-primary)">Painel Contextual</span>
-           <button class="icon-btn" onclick="openDailyNotesModal()" title="Caderno Diário" style="background:var(--hover-bg);border-color:transparent;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
-           </button>
+      <aside class="right-panel" id="contextPanelContainer" style="transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);">
+        <div class="right-panel-header" onclick="toggleContextPanelMinimize()" style="padding: 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='var(--hover-bg)'" onmouseout="this.style.background='transparent'">
+           <span style="font-family:'Google Sans';font-weight:600;font-size:15px;color:var(--text-primary); pointer-events: none;">Painel Contextual</span>
+           <div style="display:flex; gap: 8px; align-items:center;">
+             <button class="icon-btn" id="minimizeChevronBtn" title="Minimizar Painel" style="background:transparent;border-color:transparent; pointer-events:none; transition: transform 0.3s ease;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+             </button>
+             <button class="icon-btn" onclick="openDailyNotesModal(); event.stopPropagation();" title="Caderno Diário" style="background:var(--hover-bg);border-color:transparent;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
+             </button>
+           </div>
         </div>
         
         <div style="padding: 24px; flex: 1;">
@@ -14482,7 +14520,10 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
 
             const response = await fetch(`${API_URL}/ai/chat`, {
               method: "POST",
-              headers: { "Content-Type": "application/json; charset=utf-8" },
+              headers: { 
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": `Bearer ${localStorage.getItem("neurotask_token") || ""}`
+              },
               body: JSON.stringify({
                 message: `${contextText}\n\nPergunta do usuário: ${message}`,
               }),
@@ -20178,6 +20219,7 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
           const response = await fetch(`${API_URL}/analytics/stats`, {
             headers: {
               "X-Auth-Token": storedToken,
+              "Authorization": storedToken ? `Bearer ${storedToken}` : "",
             },
           });
 
@@ -20230,7 +20272,8 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
 
           // Preenche mini-dashboard com base nas métricas gerais + tarefas do dia
           try {
-            const todayResp = await fetch(`${API_URL}/analytics/today`);
+            const authHeaders = storedToken ? { Authorization: `Bearer ${storedToken}` } : {};
+            const todayResp = await fetch(`${API_URL}/analytics/today`, { headers: authHeaders });
             const todayStats = await todayResp.json();
             const tTotal = Number(todayStats.totalTasks) || 0;
             const tDone =
@@ -21054,10 +21097,28 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
       function applyProfileToUI() {
         const headerIcon = document.getElementById("profileAvatarIcon");
         const headerImg = document.getElementById("profileAvatarImage");
+        const headerUserAvatarImg = document.getElementById("header-user-avatar-image");
         const modalIcon = document.getElementById("profileModalAvatarIcon");
         const modalImg = document.getElementById("profileModalAvatarImage");
 
         const hasAvatar = !!profileState.avatarDataUrl;
+        
+        if (headerUserAvatarImg) {
+          headerUserAvatarImg.onerror = function() {
+            this.onerror = null;
+            this.src = "image_12.png";
+            this.alt = "User Avatar Placeholder";
+          };
+          
+          if (hasAvatar) {
+            headerUserAvatarImg.src = profileState.avatarDataUrl;
+            headerUserAvatarImg.alt = "User Avatar";
+          } else {
+            headerUserAvatarImg.src = "image_12.png";
+            headerUserAvatarImg.alt = "User Avatar Placeholder";
+          }
+        }
+        
         if (headerImg) {
           if (hasAvatar) {
             headerImg.src = profileState.avatarDataUrl;
@@ -21131,7 +21192,7 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
         saveProfileToBackend();
       }
 
-      function saveProfile() {
+      async function saveProfile() {
         const nameInput = document.getElementById("profileNameInput");
         const emailInput = document.getElementById("profileEmailInput");
         const phoneInput = document.getElementById("profilePhoneInput");
@@ -21143,16 +21204,16 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
 
         const file = fileInput && fileInput.files && fileInput.files[0];
         if (file) {
-          resizeImageTo256(file, (dataUrl) => {
+          resizeImageTo256(file, async (dataUrl) => {
             profileState.avatarDataUrl = dataUrl;
+            await saveProfileToBackend();
             applyProfileToUI();
-            saveProfileToBackend();
             closeProfileModal();
             if (fileInput) fileInput.value = "";
           });
         } else {
+          await saveProfileToBackend();
           applyProfileToUI();
-          saveProfileToBackend();
           closeProfileModal();
         }
       }
@@ -22894,12 +22955,13 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
           lastObjectUrl = nextUrl;
 
           const headerImg = document.getElementById('profileAvatarImage');
+          const headerUserAvatarImg = document.getElementById('header-user-avatar-image');
           const modalImg = document.getElementById('profileModalAvatarImage');
           const headerIcon = document.getElementById('profileAvatarIcon');
           const modalIcon = document.getElementById('profileModalAvatarIcon');
 
           const applyPreview = () => {
-            [headerImg, modalImg].forEach((img) => {
+            [headerImg, modalImg, headerUserAvatarImg].forEach((img) => {
               if (!img) return;
               img.src = nextUrl;
               img.style.display = 'block';
@@ -22917,6 +22979,11 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
               img.style.display = 'none';
               img.alt = 'Foto de perfil';
             });
+            
+            if (headerUserAvatarImg) {
+              headerUserAvatarImg.src = 'image_12.png';
+              headerUserAvatarImg.alt = 'User Avatar Placeholder';
+            }
             [headerIcon, modalIcon].forEach((el) => {
               if (el) el.style.display = '';
             });
@@ -23056,18 +23123,9 @@ setTimeout(() => {
       window.toggleLeftMenu = function() {
         const sidebar = document.getElementById('sidebar');
         if (sidebar) {
-          const isCollapsed = sidebar.classList.toggle('collapsed');
+          sidebar.classList.toggle('collapsed');
           const mainContent = document.querySelector('.main-content');
           if (mainContent) mainContent.classList.toggle('expanded');
-          
-          const iconBtn = document.getElementById('globalNavToggle');
-          if (iconBtn) {
-            if (isCollapsed) {
-              iconBtn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
-            } else {
-              iconBtn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-            }
-          }
         }
       }
 
@@ -23087,6 +23145,18 @@ setTimeout(() => {
             btn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
           }
         });
+      }
+
+      window.toggleContextPanelMinimize = function() {
+        const contextPanel = document.getElementById('contextPanelContainer');
+        if (contextPanel) {
+          contextPanel.classList.toggle('context-panel-minimized');
+          const isMinimized = contextPanel.classList.contains('context-panel-minimized');
+          const chevronBtn = document.getElementById('minimizeChevronBtn');
+          if (chevronBtn) {
+            chevronBtn.style.transform = isMinimized ? 'rotate(180deg)' : 'rotate(0deg)';
+          }
+        }
       }
 
       window.toggleDarkMode = function() {

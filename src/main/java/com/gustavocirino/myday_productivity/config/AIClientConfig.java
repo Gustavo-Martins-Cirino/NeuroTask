@@ -23,10 +23,10 @@ public class AIClientConfig {
     @Value("${openai.api.key}")
     private String apiKey;
 
-    @Value("${openai.model.name}")
+    @Value("${openai.model.name:llama-3.3-70b-versatile}")
     private String modelName;
 
-    @Value("${openai.base.url:https://api.openai.com/v1}")
+    @Value("${openai.base.url:https://api.groq.com/openai/v1}")
     private String baseUrl;
 
     @Value("${openai.temperature:0.7}")

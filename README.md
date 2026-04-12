@@ -1,5 +1,18 @@
 # 🧠 NeuroTask - Cognitive Productivity Manager
 
+**Versão Atual:** 1.0.0  
+**Autor:** Gustavo Cirino  
+**Link do Repositório:** [Cole o link do seu repositório público do GitHub aqui]
+
+## 🎯 O Problema Real
+Muitas pessoas, especialmente estudantes, trabalhadores de alta performance e indivíduos neurodivergentes (como com TDAH), sofrem com a sobrecarga cognitiva e a paralisia de decisão ao tentar organizar suas rotinas. Listas de tarefas infinitas geram ansiedade e não refletem o tempo real disponível no dia, resultando em procrastinação crônica e frustração.
+
+## 👥 Público-Alvo
+Estudantes, profissionais e pessoas neurodivergentes que possuem dificuldade de rotina, precisando de uma ferramenta visual, simples e inteligente para planejamento e diminuição de carga mental.
+
+## 💡 A Proposta de Solução
+O NeuroTask resolve (ou ameniza) essa dor propondo uma abordagem de **Time-Blocking (Blocos de Tempo)** aliada a análises comportamentais de **Inteligência Artificial**. Em vez de uma simples lista, o usuário arrasta suas tarefas diretamente para a agenda, limitando o agendamento ao tempo fisicamente disponível, recebendo feedback prático do seu Coach de IA sobre padrões de procrastinação e ritmo de trabalho.
+
 ## 🎯 Visão Geral
 
 **NeuroTask** é um sistema de produtividade cognitiva que combina **time-blocking**, **IA generativa** e **análise comportamental** para otimizar sua gestão de tarefas e energia mental.
@@ -10,7 +23,7 @@
 
 ### 🌟 Diferenciais
 
-- 🤖 **Coach de IA com Google Gemini**: Análises reais de produtividade, padrões e recomendações personalizadas
+- 🤖 **Coach de IA com Groq API (Llama 3)**: Análises reais de produtividade, padrões e recomendações personalizadas
 - 📅 **Time-Blocking Visual**: Drag & Drop intuitivo para agendar tarefas
 - 📊 **Análises Cognitivas**: Identifica sobrecarga mental e otimiza distribuição de tarefas
 - 💬 **Chat Interativo**: Converse com um coach especializado em produtividade
@@ -27,7 +40,7 @@
 - **Spring Boot 3.5.7**
 - **MySQL**
 - **LangChain4j 0.36.2** (Integração com IA)
-- **Google Gemini 1.5 Flash** (Modelo de IA)
+- **Groq API / Llama 3** (Modelo de IA de alta velocidade)
 - **JPA/Hibernate**
 - **Lombok**
 
@@ -49,30 +62,30 @@
 ✅ Java 21
 ✅ MySQL (localhost)
 ✅ Maven (incluído via mvnw)
-✅ Google Gemini API Key (grátis)
+✅ Groq API Key (grátis)
 ```
 
 ### 2️⃣ Configurar Banco de Dados
 
 O projeto está configurado para conectar no MySQL em `localhost:3306` e criar o database automaticamente (se não existir).
 
-### 3️⃣ Obter API Key do Gemini
+### 3️⃣ Obter API Key da Groq
 
-1. Acesse: https://aistudio.google.com/app/apikey
+1. Acesse: https://console.groq.com/keys
 2. Clique em "Create API Key"
-3. Copie a chave gerada
+3. Copie a chave gerada (ela começa com `gsk_`)
 
 ### 4️⃣ Configurar Variável de Ambiente
 
 ```cmd
 # Windows (CMD)
-set GEMINI_API_KEY=SuaAPIKeyAqui
+set OPENAI_API_KEY=SuaAPIKeyAqui
 
 # Windows (PowerShell)
-$env:GEMINI_API_KEY="SuaAPIKeyAqui"
+$env:OPENAI_API_KEY="SuaAPIKeyAqui"
 
 # Linux/Mac
-export GEMINI_API_KEY=SuaAPIKeyAqui
+export OPENAI_API_KEY=SuaAPIKeyAqui
 ```
 
 ### 5️⃣ Executar Aplicação
@@ -85,6 +98,22 @@ mvnw spring-boot:run
 ### 6️⃣ Acessar
 
 Abra: **http://localhost:8080**
+
+### 7️⃣ Qualidade de Código e Testes (CI/CD)
+
+Este projeto utiliza Integração Contínua via GitHub Actions para assegurar o ciclo de vida da aplicação.
+
+**Como rodar os testes automatizados:**
+(Cobre caminhos felizes, validação de regras de negócios e erros de inputs)
+```bash
+./mvnw test
+```
+
+**Como rodar a Análise Estática (Linting):**
+(Utiliza Checkstyle para analisar a qualidade e padronização do código fonte)
+```bash
+./mvnw checkstyle:check -Dcheckstyle.config.location=checkstyle.xml
+```
 
 ---
 
