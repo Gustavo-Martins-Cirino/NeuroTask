@@ -7938,6 +7938,7 @@
           <span>Energia</span>
         </div>
 
+        <!--
         <div class="nav-item" data-view="gamification" onclick="showView('gamification')">
           <span class="nav-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -7946,6 +7947,7 @@
           </span>
           <span>Gamificação</span>
         </div>
+        -->
 
         <div class="nav-item" data-view="weeklyReview" onclick="showView('weeklyReview')">
           <span class="nav-icon">
@@ -8027,13 +8029,15 @@
             </svg>
           </button>
 
-          <!-- Nível / XP -->
+          <!-- Nível / XP (Oculto) -->
+          <!--
           <div class="xp-container" style="display: flex; align-items: center; gap: 8px;">
             <span class="xp-text" id="xp-text" style="font-size: 13px; color: var(--text-primary); font-weight: 600; white-space: nowrap;">Lvl 1 - 0/100 XP</span>
             <div class="xp-track" style="width: 50px; height: 4px; background: var(--hover-bg); border-radius: 2px; overflow: hidden;">
               <div class="xp-fill" id="xp-fill" style="height: 100%; width: 0%; background: var(--success); transition: width 0.4s ease;"></div>
             </div>
           </div>
+          -->
 
           <!-- Foto de Perfil -->
           <div class="profile-avatar circular-avatar" onclick="openProfileModal()" style="width: 36px; height: 36px; border-radius: 50%; overflow: hidden; border: 2px solid var(--border-color); flex-shrink: 0; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.borderColor='var(--teal)';" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='var(--border-color)';">
@@ -10789,6 +10793,7 @@
       }
 
       async function checkPendingHabits() {
+        return; // Desativado emergencialmente: remove o popup perguntando de atividades/habitos pendentes
         // Verificando pendências...
 
         // Controle de frequência: no máximo 1x ao dia
