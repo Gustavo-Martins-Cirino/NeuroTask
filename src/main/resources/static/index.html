@@ -9318,8 +9318,13 @@
     </div>
 
     <!-- RIGHT PANEL -->
+<<<<<<< HEAD
       <aside class="right-panel notes-reminders-panel" id="contextPanelContainer" style="display: flex; flex-direction: column;">
         <div class="right-panel-header panel-header" onclick="toggleContextPanelMinimize()" style="padding: 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='var(--hover-bg)'" onmouseout="this.style.background='transparent'">
+=======
+      <aside class="right-panel" id="contextPanelContainer" style="transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column;">
+        <div class="right-panel-header" onclick="toggleContextPanelMinimize()" style="padding: 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='var(--hover-bg)'" onmouseout="this.style.background='transparent'">
+>>>>>>> 856d4fabb91761af41c75cba9ebe7666e281631d
            <span style="font-family:'Google Sans';font-weight:600;font-size:15px;color:var(--text-primary); pointer-events: none;">Anotações e Lembretes</span>
            <div style="display:flex; gap: 8px; align-items:center;">
              <button class="icon-btn chevron-icon" id="minimizeChevronBtn" title="Minimizar Painel" style="background:transparent;border-color:transparent; pointer-events:none;">
@@ -9328,7 +9333,11 @@
            </div>
         </div>
         
+<<<<<<< HEAD
         <div class="notes-reminders-content" style="padding: 24px; flex: 1; display: flex; flex-direction: column; gap: 24px;">
+=======
+        <div style="padding: 24px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 24px;">
+>>>>>>> 856d4fabb91761af41c75cba9ebe7666e281631d
             <style>
               #contextPanelNotes { resize: none; background-color: transparent !important; color: inherit !important; border: none !important; width: 100%; min-height: 120px; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; outline: none; }
               #contextPanelNotes::placeholder, .seamless-input::placeholder { color: var(--text-secondary); opacity: 0.6; }
