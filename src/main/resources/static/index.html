@@ -90,7 +90,36 @@
 
       .right-panel, .context-panel, .neuro-chat-panel, #rightPanel { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease, min-width 0.3s ease, opacity 0.3s ease; }
       .right-panel.collapsed, .context-panel.collapsed, .neuro-chat-panel.collapsed, #rightPanel.collapsed { transform: translateX(100%); width: 0 !important; min-width: 0 !important; opacity: 0; padding: 0 !important; overflow: hidden; border: none; }
-      .right-panel.context-panel-minimized { transform: translateY(calc(100% - 73px)); box-shadow: none; border-color: var(--border-color); }
+      .notes-reminders-panel {
+        max-height: 86px;
+        overflow: hidden;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        transition: max-height 0.3s ease-in-out;
+      }
+      .notes-reminders-panel::-webkit-scrollbar {
+        display: none;
+      }
+      .notes-reminders-panel.expanded {
+        max-height: calc(100vh - 140px);
+      }
+      .notes-reminders-panel .notes-reminders-content {
+        overflow: hidden !important;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .notes-reminders-panel .notes-reminders-content::-webkit-scrollbar {
+        display: none;
+      }
+      .notes-reminders-panel.expanded .notes-reminders-content {
+        overflow-y: auto !important;
+      }
+      .notes-reminders-panel .chevron-icon {
+        transition: transform 0.3s ease;
+      }
+      .notes-reminders-panel.expanded .chevron-icon {
+        transform: rotate(180deg);
+      }
 
       /* XP Bar */
       .xp-container {
@@ -2256,34 +2285,40 @@
         position: fixed;
         right: 0;
         bottom: 0;
+        top: 80px;
         width: 400px;
-        height: 100vh;
-        background: var(--bg-sidebar);
+        height: calc(100vh - 80px);
+        background: var(--bg-card, #ffffff);
+        color: var(--text-primary, #1f2937);
         border-left: 1px solid var(--border-color);
+        border-radius: 12px 0 0 0;
         box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.3s;
         z-index: 1100;
         display: flex;
         flex-direction: column;
         opacity: 0;
         visibility: hidden;
-        transform: translateX(100%);
+        transform: translateY(10px);
       }
 
+      .chat-panel.active,
       .chat-panel.open {
         right: 0;
         opacity: 1;
         visibility: visible;
-        transform: translateX(0);
+        transform: translateY(0);
       }
 
       .light-mode .chat-panel {
-        background: var(--bg-sidebar);
+        background: var(--bg-card, #f9fafb);
+        color: var(--text-primary, #1f2937);
         border-left: 1px solid var(--border-color);
       }
 
       body.dark-mode .chat-panel {
-        background: var(--bg-sidebar);
+        background: var(--bg-card, #1e1e1e);
+        color: var(--text-primary, #e4e4e7);
         border-left: 1px solid var(--border-color);
       }
 
@@ -3734,55 +3769,37 @@
       }
 
       .chat-header {
-        padding: 20px 16px 16px 16px;
-        border-bottom: 1px solid var(--border-color);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        position: relative;
-        min-height: 64px;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border-color);
       }
 
       .close-chat {
-        position: absolute;
-        right: 3px;
-        top: 75px;
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
         border: none;
-        background: transparent !important;
-        color: var(--text-secondary) !important;
-        font-size: 20px;
+        background: transparent;
+        color: var(--text-secondary);
+        margin: 0;
+        padding: 0;
         cursor: pointer;
-        border-radius: 0;
-        display: flex !important;
+        border-radius: 8px;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        z-index: 10000 !important;
         transition: all 0.2s ease;
-        opacity: 0.7 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
-        padding: 4px;
       }
       
       .close-chat svg {
-        stroke: var(--text-secondary) !important;
-        stroke-width: 2 !important;
-        opacity: 1 !important;
-      }
-
-      body.dark-mode .close-chat svg {
-        stroke: rgba(255, 255, 255, 0.7) !important;
+        stroke: currentColor;
+        stroke-width: 2;
       }
 
       .close-chat:hover {
-        opacity: 1 !important;
-        background: transparent !important;
-      }
-      
-      .close-chat:hover svg {
-        stroke: var(--text-primary) !important;
+        background: var(--hover-bg);
+        color: var(--text-primary);
       }
 
       .chat-title {
@@ -3796,112 +3813,143 @@
 
       /* CHAT MESSAGES */
 
-      .close-chat:hover {
-        background: var(--hover-bg);
-      }
-
-      .chat-messages {
+      .chat-messages.neuro-chat-container {
         flex: 1;
         overflow-y: auto;
-        padding: 16px;
+        padding: 18px 18px 22px;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 14px;
+        background: transparent;
+        color: var(--text-primary, #1f2937);
       }
 
-      .chat-message {
-        padding: 12px;
-        border-radius: 14px;
-        max-width: 80%;
+      .chat-messages .message {
+        width: 100%;
+      }
+
+      .chat-messages .user-message {
+        margin-left: 12%;
+        text-align: right;
+      }
+
+      .chat-messages .user-message p {
+        margin: 0;
+        color: var(--text-primary, #1f2937);
         font-size: 14px;
-        line-height: 1.5;
-      }
-      
-      .chat-message.ai:first-child {
-        margin-top: 40px;
+        line-height: 1.55;
       }
 
-      .chat-message.user {
-        background: var(--google-blue, #4285f4);
-        color: #ffffff;
-        align-self: flex-end;
-        margin-left: auto;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      .chat-messages .ai-message {
+        color: var(--text-primary, #1f2937);
+        line-height: 1.6;
+        padding-bottom: 24px;
+        border-bottom: 1px solid color-mix(in srgb, var(--text-primary, #1f2937) 12%, transparent);
       }
 
-      .chat-message.ai {
-        background: var(--bg-card);
-        color: var(--text-primary);
-        align-self: flex-start;
+      .chat-messages .ai-content {
+        color: var(--text-primary, #1f2937);
+      }
+
+      .chat-messages .ai-content p {
+        margin: 0 0 10px;
+      }
+
+      .chat-messages .ai-content p:last-child {
+        margin-bottom: 0;
+      }
+
+      .chat-messages .time-block {
+        margin-top: 10px;
+        background: color-mix(in srgb, var(--bg-main, #ffffff) 92%, var(--text-primary, #1f2937) 8%);
         border: 1px solid var(--border-color);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
-
-      .chat-message .chat-typing {
-        display: flex;
-        align-items: center;
-        gap: 8px;
+        border-radius: 4px;
+        padding: 10px 12px;
+        font-family: "Share Tech Mono", "JetBrains Mono", Consolas, monospace;
         font-size: 13px;
-        color: var(--text-secondary);
+        color: var(--text-primary, #1f2937);
       }
 
-      .chat-typing-dots {
-        display: inline-flex;
-        gap: 4px;
+      .chat-messages .ai-loading {
+        padding-bottom: 18px;
       }
 
-      .chat-typing-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 999px;
-        background: var(--google-blue);
-        opacity: 0.7;
-        animation: ntChatPulse 1.2s infinite ease-in-out;
+      .chat-messages .shimmer-line {
+        height: 10px;
+        border-radius: 4px;
+        background: linear-gradient(
+          90deg,
+          color-mix(in srgb, var(--text-primary, #1f2937) 6%, transparent) 0%,
+          color-mix(in srgb, var(--text-primary, #1f2937) 18%, transparent) 50%,
+          color-mix(in srgb, var(--text-primary, #1f2937) 6%, transparent) 100%
+        );
+        background-size: 220% 100%;
+        animation: neuroShimmer 1.5s linear infinite;
       }
 
-      .chat-typing-dot:nth-child(2) {
-        animation-delay: 0.15s;
+      .chat-input-container {
+        background: var(--bg-card, #ffffff);
       }
 
-      .chat-typing-dot:nth-child(3) {
-        animation-delay: 0.3s;
+      .chat-input {
+        background: var(--bg-main, #ffffff);
+        color: var(--text-primary, #1f2937);
+        border: 1px solid var(--border-color, #d1d5db);
       }
 
-      @keyframes ntChatPulse {
+      .chat-input::placeholder {
+        color: var(--text-secondary, #6b7280);
+      }
+
+      .light-mode .chat-input {
+        background: #ffffff;
+        color: #1f2937;
+        border-color: #d1d5db;
+      }
+
+      body.dark-mode .chat-input {
+        background: color-mix(in srgb, var(--bg-main, #1e1e1e) 88%, #000 12%);
+        color: #e4e4e7;
+        border-color: color-mix(in srgb, var(--text-primary, #e4e4e7) 18%, transparent);
+      }
+
+      .chat-messages .shimmer-line + .shimmer-line {
+        margin-top: 10px;
+      }
+
+      .chat-messages .shimmer-line.short {
+        width: 38%;
+      }
+
+      .chat-messages .shimmer-line.long {
+        width: 74%;
+      }
+
+      @keyframes neuroShimmer {
         0% {
-          transform: translateY(0);
-          opacity: 0.2;
-        }
-        40% {
-          transform: translateY(-2px);
-          opacity: 1;
+          background-position: 100% 0;
         }
         100% {
-          transform: translateY(0);
-          opacity: 0.2;
+          background-position: -100% 0;
         }
       }
 
-      /* FLOATING BRAIN FAB */
-      .brain-fab {
+      /* Neuro IA Button - Minimalista Premium */
+      .neuro-ia-btn {
         position: fixed;
         right: 24px;
         bottom: 96px;
         z-index: 1100;
-        display: inline-flex;
+        display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 10px 18px;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 20px;
         border-radius: 999px;
-        border: 1px solid var(--panel-border);
-        background:
-          radial-gradient(
-            circle at 0 0,
-            rgba(99, 102, 241, 0.28),
-            transparent 55%
-          ),
-          color-mix(in srgb, var(--bg-card) 85%, rgba(15, 17, 23, 0.92));
-        color: var(--text-primary);
+        background-color: #f3f4f6;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        outline: none;
+        color: #5a67d8;
         font-family:
           "Google Sans",
           system-ui,
@@ -3909,44 +3957,49 @@
           BlinkMacSystemFont,
           "Segoe UI",
           sans-serif;
-        font-size: 13px;
-        font-weight: 500;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1;
         cursor: pointer;
-        box-shadow: var(--glow);
-        backdrop-filter: blur(18px) saturate(140%);
-        transition:
-          transform 0.16s ease,
-          box-shadow 0.16s ease,
-          background 0.16s ease,
-          opacity 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transition: all 0.2s ease-in-out;
         opacity: 1;
         pointer-events: auto;
       }
 
-      .brain-fab.modal-open {
+      .neuro-ia-btn.modal-open {
         opacity: 0;
         pointer-events: none;
       }
 
-      .brain-fab:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-        background:
-          radial-gradient(
-            circle at 0 0,
-            rgba(99, 102, 241, 0.38),
-            transparent 55%
-          ),
-          color-mix(in srgb, var(--bg-card) 80%, rgba(15, 17, 23, 0.9));
+      .neuro-ia-btn:hover {
+        background-color: #e5e7eb;
+        transform: translateY(-1px);
       }
 
-      .brain-fab-icon {
-        font-size: 20px;
-        filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.5));
+      .neuro-ia-btn:focus-visible {
+        outline: none;
+        box-shadow:
+          0 2px 4px rgba(0, 0, 0, 0.02),
+          0 0 0 3px rgba(90, 103, 216, 0.22);
       }
 
-      .brain-fab-label {
-        white-space: nowrap;
+      body.dark-mode .neuro-ia-btn {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      body.dark-mode .neuro-ia-btn:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .neuro-icon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
       }
 
       .chat-input {
@@ -7764,14 +7817,8 @@
       .zen-chat-input-wrapper input { flex: 1; background: var(--bg-main); border: 1px solid var(--border-color); color: white; padding: 10px 14px; border-radius: 20px; outline: none; font-family: inherit; font-size: 13px; }
       .zen-chat-input-wrapper input:focus { border-color: var(--primary); }
 
-      .daily-notes-modal-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 10000; animation: fadeIn 0.3s ease; }
-      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-      .daily-notes-modal { background: #10141C; width: 640px; max-width: 90vw; border-radius: 20px; border: 1px solid color-mix(in srgb, var(--border-color) 80%, transparent); padding: 30px; box-shadow: 0 24px 48px rgba(0,0,0,0.5); }
-      .daily-notes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 20px; font-weight: 600; font-family: 'Google Sans'; color: #fff; }
-      .daily-notes-content textarea { width: 100%; height: 160px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); color: #fff; border-radius: 12px; padding: 18px; margin-bottom: 24px; resize: none; font-family: 'Inter', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; }
-      .daily-notes-content textarea:focus { border-color: var(--primary); }
-      .reminders-list { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
-      .reminder-item { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-primary); }
+      .reminders-list { background: transparent !important; border: none; padding: 0; padding-top: 20px; border-top: 1px solid var(--border-color); }
+      .reminder-item { padding: 10px 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-primary); }
       .reminder-item:last-child { border-bottom: none; }
 
       /* RESET FINAL DE BORDAS NEUROTASK */
@@ -9271,23 +9318,68 @@
     </div>
 
     <!-- RIGHT PANEL -->
-      <aside class="right-panel" id="contextPanelContainer" style="transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);">
-        <div class="right-panel-header" onclick="toggleContextPanelMinimize()" style="padding: 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='var(--hover-bg)'" onmouseout="this.style.background='transparent'">
-           <span style="font-family:'Google Sans';font-weight:600;font-size:15px;color:var(--text-primary); pointer-events: none;">Painel Contextual</span>
+      <aside class="right-panel notes-reminders-panel" id="contextPanelContainer" style="display: flex; flex-direction: column;">
+        <div class="right-panel-header panel-header" onclick="toggleContextPanelMinimize()" style="padding: 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='var(--hover-bg)'" onmouseout="this.style.background='transparent'">
+           <span style="font-family:'Google Sans';font-weight:600;font-size:15px;color:var(--text-primary); pointer-events: none;">Anotações e Lembretes</span>
            <div style="display:flex; gap: 8px; align-items:center;">
-             <button class="icon-btn" id="minimizeChevronBtn" title="Minimizar Painel" style="background:transparent;border-color:transparent; pointer-events:none; transition: transform 0.3s ease;">
+             <button class="icon-btn chevron-icon" id="minimizeChevronBtn" title="Minimizar Painel" style="background:transparent;border-color:transparent; pointer-events:none;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-             </button>
-             <button class="icon-btn" onclick="openDailyNotesModal(); event.stopPropagation();" title="Caderno Diário" style="background:var(--hover-bg);border-color:transparent;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
              </button>
            </div>
         </div>
         
-        <div style="padding: 24px; flex: 1;">
-          <div style="color:var(--text-secondary);font-size:13px;line-height:1.5;text-align:center;margin-top:20px;">
-            Este espaço é dinâmico. Anotações para a tarefa atual, integrações ou contexto auxiliar aparecerão aqui.
-          </div>
+        <div class="notes-reminders-content" style="padding: 24px; flex: 1; display: flex; flex-direction: column; gap: 24px;">
+            <style>
+              #contextPanelNotes { resize: none; background-color: transparent !important; color: inherit !important; border: none !important; width: 100%; min-height: 120px; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; outline: none; }
+              #contextPanelNotes::placeholder, .seamless-input::placeholder { color: var(--text-secondary); opacity: 0.6; }
+              .seamless-input {
+                border: none !important;
+                background-color: transparent !important;
+                outline: none !important;
+                box-shadow: none !important;
+                color: inherit !important;
+                font-family: inherit;
+                font-size: inherit;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+                display: inline-block;
+                min-width: 80%;
+                cursor: text;
+              }
+              .seamless-input:empty:before {
+                  content: attr(data-placeholder);
+                  color: var(--text-secondary);
+                  opacity: 0.6;
+                  pointer-events: none;
+                  display: block; /* For Firefox */
+              }
+              .seamless-input:-webkit-autofill,
+              .seamless-input:-webkit-autofill:hover,
+              .seamless-input:-webkit-autofill:focus,
+              .seamless-input:-webkit-autofill:active {
+                  -webkit-transition: "color 9999s ease-out, background-color 9999s ease-out";
+                  -webkit-transition-delay: 9999s;
+              }
+              .notes-lembretes-container {
+                display: flex; flex-direction: column; gap: 20px; color: var(--text-primary);
+              }
+              .reminder-bullet { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+              .bullet-green { background:#34d399; box-shadow:0 0 8px rgba(52,211,153,0.4); }
+              .bullet-purple { background:#a78bfa; box-shadow:0 0 8px rgba(167,139,250,0.4); }
+              .bullet-yellow { background:#fbbf24; box-shadow:0 0 8px rgba(251,191,36,0.4); }
+              .bullet-blue { background:#60a5fa; box-shadow:0 0 8px rgba(96,165,250,0.4); }
+              .bullet-pink { background:#f472b6; box-shadow:0 0 8px rgba(244,114,182,0.4); }
+            </style>
+            
+            <div class="notes-lembretes-container">
+                <textarea id="contextPanelNotes" placeholder="Para interpretação por IA: Reflexões de Hoje... Como tem sido seu foco? Alguma ideia solta?"></textarea>
+                
+                <div class="reminders-list" id="dailyRemindersList">
+                   <div style="font-size:11px; color:var(--text-secondary); margin-bottom:12px; font-weight:700; letter-spacing:0.04em;">LEMBRETES DO DIA</div>
+                   <div class="reminder-item"><div class="reminder-bullet bullet-green"></div> <span contenteditable="true" class="seamless-input" data-placeholder="Novo lembrete..." spellcheck="false" onkeydown="handleReminderKeydown(event, this)"></span></div>
+                </div>
+            </div>
         </div>
 
       </aside>
@@ -9948,11 +10040,9 @@
     <div class="chat-panel" id="chatPanel">
       <div class="chat-header">
         <div class="chat-title">
-          <img
-            src="/img/brain.svg"
-            alt="Neuro IA"
-            style="width: 18px; height: 18px"
-          />
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
           <span>Neuro IA</span>
         </div>
         <button class="close-chat close-chat-btn" onclick="closeAIChat()">
@@ -9962,9 +10052,11 @@
           </svg>
         </button>
       </div>
-      <div class="chat-messages" id="chatMessages">
-        <div class="chat-message ai">
-          Olá! Sou a <b>Neuro IA</b>. Como posso te ajudar hoje?
+      <div class="chat-messages neuro-chat-container" id="chatMessages">
+        <div class="message ai-message">
+          <div class="ai-content">
+            <p>Ola! Sou a <b>Neuro IA</b>. Como posso te ajudar hoje?</p>
+          </div>
         </div>
       </div>
       <div class="chat-input-container">
@@ -9985,22 +10077,18 @@
       </div>
     </div>
 
-    <!-- FLOATING BRAIN FAB -->
+    <!-- Neuro IA Button -->
     <button
       type="button"
-      class="brain-fab"
+      class="neuro-ia-btn"
       id="brainFab"
       title="Abrir assistente Neuro IA"
       onclick="openAssistantChat()"
     >
-      <span class="brain-fab-icon">
-        <img
-          src="/img/brain.svg"
-          alt="Neuro IA"
-          style="width: 18px; height: 18px; display: block"
-        />
-      </span>
-      <span class="brain-fab-label">Neuro IA</span>
+      <svg class="neuro-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+      </svg>
+      Neuro IA
     </button>
 
     <script>
@@ -12222,8 +12310,7 @@
 
         // Remove classe .open de ambos os painéis
         if (chatPanel) {
-          chatPanel.classList.remove("open");
-          chatPanel.style.display = "none";
+          chatPanel.classList.remove("open", "active");
         }
         if (taskPanel) {
           taskPanel.classList.remove("open");
@@ -12251,13 +12338,11 @@
         const brainFab = document.getElementById("brainFab");
 
         if (chatOpen) {
-          chatPanel.style.display = "flex";
-          chatPanel.classList.add("open");
+          chatPanel.classList.add("active");
           brainFab?.classList.add("hidden");
           document.body.classList.add("panel-open");
         } else {
-          chatPanel.classList.remove("open");
-          chatPanel.style.display = "none";
+          chatPanel.classList.remove("active");
           brainFab?.classList.remove("hidden");
           document.body.classList.remove("panel-open");
         }
@@ -12278,8 +12363,7 @@
         
         // Agora abre apenas o chat
         chatOpen = true;
-        chatPanel.style.display = "flex";
-        chatPanel.classList.add("open");
+        chatPanel.classList.add("active");
         brainFab?.classList.add("hidden");
         document.body.classList.add("panel-open");
         
@@ -13048,14 +13132,11 @@
             closeBtn.className = 'close-chat close-chat-btn';
             closeBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="opacity: 1 !important;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
             closeBtn.onclick = closeAIChat;
-            closeBtn.style.cssText = 'position: absolute; right: 15px; top: 20px; z-index: 9999; cursor: pointer; width: 32px; height: 32px; border: none; background: transparent; color: var(--text-primary); border-radius: 50%; display: flex !important; align-items: center; justify-content: center; opacity: 1 !important; visibility: visible !important;';
             chatHeader.appendChild(closeBtn);
           }
         } else {
-          // Se já existe, garantir que esteja visível
-          closeBtn.style.display = 'flex';
-          closeBtn.style.opacity = '1';
-          closeBtn.style.visibility = 'visible';
+          // Se já existe, garante handler correto sem sobrescrever layout CSS.
+          closeBtn.onclick = closeAIChat;
         }
       }
 
@@ -13148,7 +13229,7 @@
         
         // Fechar chat se estiver aberto
         const chatPanel = document.getElementById("chatPanel");
-        if (chatPanel && chatPanel.classList.contains("open")) {
+        if (chatPanel && (chatPanel.classList.contains("open") || chatPanel.classList.contains("active"))) {
           closeAIChat();
         }
 
@@ -13870,17 +13951,17 @@
 
       function showTypingIndicator() {
         if (typingMessageId) return;
-        typingMessageId = addChatMessage(
-          "ai",
-          '<div class="chat-typing">' +
-            '<span class="chat-typing-dots">' +
-            '<span class="chat-typing-dot"></span>' +
-            '<span class="chat-typing-dot"></span>' +
-            '<span class="chat-typing-dot"></span>' +
-            "</span>" +
-            "<span>Neuro IA está pensando...</span>" +
-            "</div>",
-        );
+        const container = document.getElementById("chatMessages");
+        if (!container) return;
+        const loading = document.createElement("div");
+        loading.className = "message ai-loading";
+        loading.id = `msg-${Date.now()}`;
+        loading.innerHTML =
+          '<div class="shimmer-line short"></div>' +
+          '<div class="shimmer-line long"></div>';
+        container.appendChild(loading);
+        container.scrollTop = container.scrollHeight;
+        typingMessageId = loading.id;
       }
 
       function hideTypingIndicator() {
@@ -14254,10 +14335,10 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
         if (!messages) return;
 
         const confirmation = document.createElement('div');
-        confirmation.className = 'chat-message ai';
+        confirmation.className = 'message ai-message';
         confirmation.innerHTML = `
-          <div class="chat-typing">
-            <span>✅ Tarefa "${taskName}" agendada com sucesso!</span>
+          <div class="ai-content">
+            <p>✅ Tarefa "${taskName}" agendada com sucesso!</p>
           </div>
         `;
         
@@ -14605,10 +14686,41 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
        * @param {string} text - Conteúdo da mensagem
        * @returns {string} ID da mensagem criada
        */
+      function escapeHtml(raw) {
+        return String(raw ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function formatAIMessageContent(text) {
+        const raw = String(text || "").trim();
+        if (!raw) return "<p>Sem conteudo.</p>";
+
+        if (/<\s*(div|p|ul|ol|li|input|button|a|strong|em|br|code|pre|span)\b/i.test(raw)) {
+          return raw;
+        }
+
+        return raw
+          .split(/\n+/)
+          .map((line) => line.trim())
+          .filter(Boolean)
+          .map((line) => {
+            const safe = escapeHtml(line);
+            if (/\b\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}\b/.test(line)) {
+              return `<div class="time-block">${safe}</div>`;
+            }
+            return `<p>${safe}</p>`;
+          })
+          .join("");
+      }
+
       function addChatMessage(sender, text) {
         const container = document.getElementById("chatMessages");
         const message = document.createElement("div");
-        message.className = `chat-message ${sender}`;
+        message.className = `message ${sender === "user" ? "user-message" : "ai-message"}`;
         
         // ===== LIMPEZA RADICAL DA UI: REMOVE JSON_ACTION COMPLETAMENTE =====
         if (sender === 'ai' && typeof text === 'string') {
@@ -14642,7 +14754,11 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
           text = finalText;
         }
         
-        message.innerHTML = text;
+        if (sender === "user") {
+          message.innerHTML = `<p>${escapeHtml(text)}</p>`;
+        } else {
+          message.innerHTML = `<div class="ai-content">${formatAIMessageContent(text)}</div>`;
+        }
         message.id = `msg-${Date.now()}`;
         container.appendChild(message);
         container.scrollTop = container.scrollHeight;
@@ -23042,42 +23158,40 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
     <!-- Módulos de IA NeuroTask -->
     <script type="module" src="/js/modules/aiDashboard.js"></script>
     <script>
-window.openDailyNotesModal = function() {
-  let modal = document.getElementById('dailyNotesOverlay');
-  if (!modal) {
-    const html = `
-    <!-- Daily Notes Modal -->
-    <div class="daily-notes-modal-overlay" id="dailyNotesOverlay" onclick="if(event.target===this) closeDailyNotesModal()">
-      <div class="daily-notes-modal">
-         <div class="daily-notes-header">
-            <div style="display:flex;align-items:center;gap:12px;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
-              <span>Notas e Reflexões Diárias</span>
-            </div>
-            <button class="icon-btn" style="border:none;background:transparent;" onclick="closeDailyNotesModal()" title="Fechar">×</button>
-         </div>
-         <div class="daily-notes-content">
-            <textarea placeholder="Para interpretação por IA: Reflexões de Hoje... Como tem sido seu foco? Alguma ideia solta?"></textarea>
-            <div class="reminders-list">
-               <div style="font-size:11px; color:var(--text-secondary); margin-bottom:12px; font-weight:700; letter-spacing:0.04em;">LEMBRETES DO DIA</div>
-               <div class="reminder-item"><div style="width:10px;height:10px;border-radius:50%;background:#34d399;box-shadow:0 0 8px rgba(52,211,153,0.4);"></div> Planejamento Estratégico</div>
-               <div class="reminder-item"><div style="width:10px;height:10px;border-radius:50%;background:#a78bfa;box-shadow:0 0 8px rgba(167,139,250,0.4);"></div> Sessão de Protótipo de UI</div>
-               <div class="reminder-item"><div style="width:10px;height:10px;border-radius:50%;background:#fbbf24;box-shadow:0 0 8px rgba(251,191,36,0.4);"></div> Chamada Cliente</div>
-            </div>
-         </div>
-         <div style="display:flex; justify-content:flex-end; margin-top:24px;">
-           <button class="modal-btn modal-btn-primary" onclick="closeDailyNotesModal(); if(typeof showToast === 'function') showToast('Notas salvas com sucesso!')" style="padding:12px 24px;font-size:14px;border-radius:8px;">Salvar Progresso</button>
-         </div>
-      </div>
-    </div>`;
-    document.body.insertAdjacentHTML('beforeend', html);
-    modal = document.getElementById('dailyNotesOverlay');
+window.handleReminderKeydown = function(e, input) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const currentItem = input.closest('.reminder-item');
+    const existingItemsCount = document.querySelectorAll('.reminder-item').length;
+    const colors = ['bullet-green', 'bullet-purple', 'bullet-yellow', 'bullet-blue', 'bullet-pink'];
+    const nextColorClass = colors[existingItemsCount % colors.length];
+    
+    const newItem = document.createElement('div');
+    newItem.className = 'reminder-item';
+    newItem.innerHTML = `<div class="reminder-bullet ${nextColorClass}"></div> <span contenteditable="true" class="seamless-input" data-placeholder="Novo lembrete..." spellcheck="false" onkeydown="handleReminderKeydown(event, this)"></span>`;
+    
+    currentItem.parentNode.insertBefore(newItem, currentItem.nextSibling);
+    newItem.querySelector('.seamless-input').focus();
+  } else if (e.key === 'Backspace' && input.textContent.trim() === '') {
+    e.preventDefault();
+    const currentItem = input.closest('.reminder-item');
+    const prevItem = currentItem.previousElementSibling;
+    if (prevItem && prevItem.classList.contains('reminder-item')) {
+      const prevInput = prevItem.querySelector('.seamless-input');
+      if (prevInput) {
+        prevInput.focus();
+        
+        // Colocar o cursor no final do texto do span
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(prevInput);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+      currentItem.remove();
+    }
   }
-  modal.style.display = 'flex';
-};
-window.closeDailyNotesModal = function() {
-  const overlay = document.getElementById('dailyNotesOverlay');
-  if (overlay) overlay.style.display = 'none';
 };
 
 setTimeout(() => {
@@ -23155,12 +23269,7 @@ setTimeout(() => {
       window.toggleContextPanelMinimize = function() {
         const contextPanel = document.getElementById('contextPanelContainer');
         if (contextPanel) {
-          contextPanel.classList.toggle('context-panel-minimized');
-          const isMinimized = contextPanel.classList.contains('context-panel-minimized');
-          const chevronBtn = document.getElementById('minimizeChevronBtn');
-          if (chevronBtn) {
-            chevronBtn.style.transform = isMinimized ? 'rotate(180deg)' : 'rotate(0deg)';
-          }
+          contextPanel.classList.toggle('expanded');
         }
       }
 
