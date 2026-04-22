@@ -2,11 +2,17 @@ package com.gustavocirino.myday_productivity.service;
 
 import com.gustavocirino.myday_productivity.dto.TaskCreateDTO;
 import com.gustavocirino.myday_productivity.dto.TaskResponseDTO;
+import com.gustavocirino.myday_productivity.exception.TaskNotFoundException;
 import com.gustavocirino.myday_productivity.model.Task;
 import com.gustavocirino.myday_productivity.model.User;
 import com.gustavocirino.myday_productivity.model.enums.TaskPriority;
 import com.gustavocirino.myday_productivity.model.enums.TaskStatus;
+import com.gustavocirino.myday_productivity.repository.FocusSessionRepository;
+import com.gustavocirino.myday_productivity.repository.ProcrastinationRecordRepository;
+import com.gustavocirino.myday_productivity.repository.TaskCategoryRepository;
 import com.gustavocirino.myday_productivity.repository.TaskRepository;
+import com.gustavocirino.myday_productivity.repository.UserRepository;
+import com.gustavocirino.myday_productivity.service.ai.ProcrastinationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +20,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,6 +32,21 @@ class TaskCrudTest {
     @Mock
     private TaskRepository taskRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private ProcrastinationService procrastinationService;
+
+    @Mock
+    private FocusSessionRepository focusSessionRepository;
+
+    @Mock
+    private ProcrastinationRecordRepository procrastinationRecordRepository;
+
+    @Mock
+    private TaskCategoryRepository taskCategoryRepository;
+
     @InjectMocks
     private TaskService taskService;
 
@@ -37,7 +57,7 @@ class TaskCrudTest {
     void setUp() {
         testUser = new User();
         testUser.setId(1L);
-        testUser.setUsername("testuser");
+        testUser.setEmail("testuser@neurotask.com");
 
         testTask = new Task();
         testTask.setId(100L);
@@ -46,12 +66,11 @@ class TaskCrudTest {
         testTask.setPriority(TaskPriority.HIGH);
         testTask.setStatus(TaskStatus.PENDING);
         testTask.setUser(testUser);
-        testTask.setCreatedAt(LocalDateTime.now());
     }
 
     @Test
     void testCreateTask_Success() {
-        TaskCreateDTO createDto = new TaskCreateDTO("Test Task", "Test Description", TaskPriority.HIGH);
+        TaskCreateDTO createDto = new TaskCreateDTO("Test Task", "Test Description", "HIGH", null, null, null);
         
         when(taskRepository.save(any(Task.class))).thenReturn(testTask);
 
@@ -66,13 +85,13 @@ class TaskCrudTest {
 
     @Test
     void testCreateTask_ValidationError() {
-        TaskCreateDTO invalidDto = new TaskCreateDTO("", "Empty Title", TaskPriority.LOW);
+        TaskCreateDTO invalidDto = new TaskCreateDTO("", "Empty Title", "LOW", null, null, null);
         
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             taskService.createTask(invalidDto, testUser);
         });
 
-        assertTrue(exception.getMessage().contains("título") || exception.getMessage().contains("title") || exception.getMessage().toLowerCase().contains("obrigatório"));
+        assertEquals("Título não pode ser vazio", exception.getMessage());
         verify(taskRepository, never()).save(any(Task.class));
     }
 
@@ -80,11 +99,11 @@ class TaskCrudTest {
     void testGetTaskById_NotFound() {
         when(taskRepository.findById(999L)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
+        TaskNotFoundException exception = assertThrows(TaskNotFoundException.class, () -> {
             taskService.getTaskById(999L);
         });
 
-        assertEquals("Task não encontrada", exception.getMessage());
+        assertEquals("Tarefa não encontrada com ID: 999", exception.getMessage());
         verify(taskRepository, times(1)).findById(999L);
     }
 }

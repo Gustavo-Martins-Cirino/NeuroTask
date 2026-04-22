@@ -8,6 +8,8 @@ import com.gustavocirino.myday_productivity.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,13 +17,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@SpringBootTest(properties = { "OPENAI_API_KEY=test-key", "openai.api.key=test-key" })
+@AutoConfigureMockMvc(addFilters = false)
 @Transactional // Garante que o banco seja limpo após cada teste
 public class TaskControllerIntegrationTest {
 
@@ -46,10 +50,12 @@ public class TaskControllerIntegrationTest {
 
         // Criar usuário padrão para os testes (já que o Controller depende de um User)
         testUser = new User();
-        testUser.setUsername("QA Tester");
         testUser.setEmail("qa@neurotask.com");
         testUser.setPassword("123456");
         testUser = userRepository.save(testUser);
+
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(testUser, null, Collections.emptyList()));
     }
 
     @Test
@@ -59,16 +65,16 @@ public class TaskControllerIntegrationTest {
                 "Finalizar Relatório de QA",
                 "Escrever testes de integração para o neurotask",
                 "HIGH", // priority
-                "09:00", // startTime
-                "10:00", // endTime
+            null, // startTime
+            null, // endTime
                 null // color
         );
 
         mockMvc.perform(post("/api/tasks")
-                        .param("userId", testUser.getId().toString())
+                .header("X-Auth-Token", "test-token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk())
+            .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title").value("Finalizar Relatório de QA"))
                 .andExpect(jsonPath("$.status").value("PENDING"));
     }
@@ -86,7 +92,7 @@ public class TaskControllerIntegrationTest {
         );
 
         mockMvc.perform(post("/api/tasks")
-                        .param("userId", testUser.getId().toString())
+                .header("X-Auth-Token", "test-token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest());
