@@ -2,7 +2,7 @@
 
 **Versão Atual:** 1.0.0  
 **Autor:** Gustavo Cirino  
-**Link do Repositório:** [Cole o link do seu repositório público do GitHub aqui]
+**Link do Repositório:** https://github.com/Gustavo-Martins-Cirino/NeuroTask
 
 ## 🎯 O Problema Real
 Muitas pessoas, especialmente estudantes, trabalhadores de alta performance e indivíduos neurodivergentes (como com TDAH), sofrem com a sobrecarga cognitiva e a paralisia de decisão ao tentar organizar suas rotinas. Listas de tarefas infinitas geram ansiedade e não refletem o tempo real disponível no dia, resultando em procrastinação crônica e frustração.
