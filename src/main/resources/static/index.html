@@ -845,19 +845,37 @@
 
       /* SIDEBAR - Glassmorphism */
       .sidebar {
-        width: 280px;
+        width: 56px;
+        min-width: 56px;
         flex-shrink: 0;
         background: var(--bg-sidebar);
-        border-right: 1px solid var(--border-color);
+        border: 1px solid var(--border-color);
         display: flex;
         flex-direction: column;
-        height: 100vh;
-        z-index: 10;
-        transition: none;
-        left: 0;
-        position: relative;
-        top: 0;
+        align-items: center;
+        height: fit-content;
+        min-height: 0;
+        max-height: 90vh;
+        z-index: 1200;
+        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        left: 20px;
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
         overflow-y: auto;
+        overflow-x: hidden;
+        border-radius: 18px;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+        padding: 20px 0;
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .sidebar:not(:hover):not(.open) {
+        width: 56px;
+        min-width: 56px;
+        padding-left: 0;
+        padding-right: 0;
       }
 
       .light-mode .sidebar {
@@ -865,12 +883,33 @@
         border-right: 1px solid var(--border-color);
       }
 
+      .sidebar:hover,
       .sidebar.open {
-        left: 0;
+        width: 220px;
+        box-shadow: 0 22px 48px rgba(0, 0, 0, 0.34);
       }
 
       .sidebar-header {
         padding: 24px 16px 16px;
+      }
+
+      .sidebar:not(:hover):not(.open) .sidebar-header {
+        padding: 20px 0 12px !important;
+        justify-content: center !important;
+      }
+
+      .sidebar .app-title {
+        max-width: 160px;
+        opacity: 1;
+        transition: opacity 0.2s ease, max-width 0.2s ease;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      .sidebar:not(:hover):not(.open) .app-title {
+        max-width: 0;
+        opacity: 0;
+        pointer-events: none;
       }
 
       .create-btn {
@@ -983,6 +1022,18 @@
           transform 0.2s;
       }
 
+      .sidebar:not(:hover):not(.open) .nav-item {
+        justify-content: center;
+        padding: 10px 0;
+        padding-left: 0;
+        padding-right: 0;
+        margin: 0 6px;
+      }
+
+      .sidebar:not(:hover):not(.open) .nav-icon {
+        margin: 0 auto;
+      }
+
       .nav-item:hover {
         background: var(--hover-bg);
         color: var(--text-primary);
@@ -997,6 +1048,11 @@
         padding-left: 17px;
       }
 
+      .sidebar:not(:hover):not(.open) .nav-item.active {
+        border-left: none;
+        padding-left: 0;
+      }
+
       .nav-icon {
         font-size: 16px;
         display: flex;
@@ -1005,6 +1061,23 @@
         width: 20px;
         height: 20px;
         flex-shrink: 0;
+      }
+
+      .nav-item span:not(.nav-icon) {
+        max-width: 160px;
+        opacity: 1;
+        transition: opacity 0.2s ease, max-width 0.2s ease;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      .sidebar:not(:hover):not(.open) .nav-item span:not(.nav-icon) {
+        max-width: 0;
+        width: 0;
+        opacity: 0;
+        display: none;
+        overflow: hidden;
+        pointer-events: none;
       }
       
       /* Ícones (neutros) */
@@ -1020,12 +1093,17 @@
         height: 100vh;
         overflow-y: auto;
         position: relative;
-        padding: 24px;
+        padding: 24px 24px 24px 120px;
         transition: margin-left 0.3s ease;
       }
 
+      body.dark-mode .main-content {
+        background: var(--bg-main);
+        color: var(--text-primary);
+      }
+
       .main-content.shifted {
-        margin-left: 280px;
+        margin-left: 0;
       }
 
       .view-container {
@@ -1042,6 +1120,11 @@
         transform: translateY(0);
       }
 
+      body.dark-mode .view-container.active {
+        background: var(--bg-main);
+        color: var(--text-primary);
+      }
+
       #calendarView.view-container.active {
         display: flex;
         flex-direction: column;
@@ -1054,6 +1137,11 @@
         flex-direction: column;
         height: calc(100vh - 64px - 48px);
         overflow: hidden;
+      }
+
+      body.dark-mode #calendarView.view-container.active,
+      body.dark-mode #tasksView.view-container.active {
+        background: var(--bg-main);
       }
 
       /* TASKS VIEW */
@@ -1497,7 +1585,7 @@
       .camera-flash {
         position: absolute;
         inset: 0;
-        background: #ffffff;
+        background: var(--text-primary);
         opacity: 0;
         pointer-events: none;
         border-radius: 10px;
@@ -2177,7 +2265,7 @@
 
       /* CALENDAR */
       .calendar-panel {
-        background: #202124;
+        background: var(--bg-card);
         border-radius: 10px;
         border: 1px solid var(--border-color);
         padding: 20px;
@@ -2186,6 +2274,12 @@
         max-width: 1200px;
         margin: 0 auto;
         backdrop-filter: blur(6px);
+        color: var(--text-primary);
+      }
+
+      body.dark-mode .calendar-panel {
+        background: color-mix(in srgb, var(--bg-card) 94%, transparent 6%);
+        border-color: rgba(255, 255, 255, 0.05);
       }
 
       .calendar-grid {
@@ -2196,6 +2290,11 @@
         border: 1px solid var(--border-color);
         border-radius: 10px;
         overflow: hidden;
+      }
+
+      body.dark-mode .calendar-grid {
+        background: color-mix(in srgb, var(--bg-card) 92%, transparent 8%);
+        border-color: rgba(255, 255, 255, 0.05);
       }
 
       .time-slot {
@@ -2210,6 +2309,11 @@
         justify-content: center;
       }
 
+      body.dark-mode .time-slot {
+        background: color-mix(in srgb, var(--bg-card) 88%, transparent 12%);
+        border-bottom-color: rgba(255, 255, 255, 0.05);
+      }
+
       .calendar-cell {
         background: #202124;
         min-height: 50px;
@@ -2217,6 +2321,11 @@
         border-bottom: 1px solid var(--border-color);
         position: relative;
         transition: background 0.2s;
+      }
+
+      body.dark-mode .calendar-cell {
+        background: color-mix(in srgb, var(--bg-card) 96%, transparent 4%);
+        border-bottom-color: rgba(255, 255, 255, 0.05);
       }
 
       .calendar-cell:hover {
@@ -2254,37 +2363,56 @@
       /* CHAT PANEL - Z-INDEX SUPERIOR PARA SOBREPOSIÇÃO */
       .chat-panel {
         position: fixed;
-        right: 0;
-        bottom: 0;
+        right: 24px;
+        bottom: 24px;
+        top: 24px;
         width: 400px;
-        height: 100vh;
+        height: auto;
         background: var(--bg-sidebar);
         border-left: 1px solid var(--border-color);
         box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
-        z-index: 1100;
+        transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+          visibility 0s linear 0.4s;
+        z-index: 1210;
         display: flex;
         flex-direction: column;
         opacity: 0;
         visibility: hidden;
-        transform: translateX(100%);
+        transform: translateY(20px);
+        border-radius: 20px;
       }
 
       .chat-panel.open {
-        right: 0;
+        right: 24px;
         opacity: 1;
         visibility: visible;
-        transform: translateX(0);
+        transform: translateY(0);
+        transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: slideFade 0.3s ease-out forwards;
+      }
+
+      @keyframes slideFade {
+        from {
+          opacity: 0;
+          transform: translateY(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .light-mode .chat-panel {
         background: var(--bg-sidebar);
-        border-left: 1px solid var(--border-color);
+        border: 1px solid var(--border-color);
       }
 
       body.dark-mode .chat-panel {
-        background: var(--bg-sidebar);
-        border-left: 1px solid var(--border-color);
+        background: #1a1a1a;
+        color: #e0e0e0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       /* TASK DETAILS PANEL STYLES - Z-INDEX MENOR */
@@ -3745,8 +3873,8 @@
 
       .close-chat {
         position: absolute;
-        right: 3px;
-        top: 75px;
+        right: 16px;
+        top: 16px;
         width: 32px;
         height: 32px;
         border: none;
@@ -3754,7 +3882,7 @@
         color: var(--text-secondary) !important;
         font-size: 20px;
         cursor: pointer;
-        border-radius: 0;
+        border-radius: 50%;
         display: flex !important;
         align-items: center;
         justify-content: center;
@@ -3803,14 +3931,14 @@
       .chat-messages {
         flex: 1;
         overflow-y: auto;
-        padding: 16px;
+        padding: 18px;
         display: flex;
         flex-direction: column;
         gap: 12px;
       }
 
       .chat-message {
-        padding: 12px;
+        padding: 14px 16px;
         border-radius: 14px;
         max-width: 80%;
         font-size: 14px;
@@ -3830,11 +3958,34 @@
       }
 
       .chat-message.ai {
-        background: var(--bg-card);
-        color: var(--text-primary);
+        background: #f3f4f6;
+        color: #1f2937;
         align-self: flex-start;
-        border: 1px solid var(--border-color);
+        border: 1px solid rgba(15, 23, 42, 0.08);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      body.dark-mode .chat-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      body.dark-mode .chat-message.user {
+        background: #2563eb;
+        color: #f8fafc;
+      }
+
+      body.dark-mode .chat-message.ai {
+        background: #1d1d1d;
+        color: #e0e0e0;
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+      }
+
+      body.dark-mode .chat-input,
+      body.dark-mode .chat-input-container input {
+        background: #1f1f1f;
+        color: #f3f4f6;
+        border-color: rgba(255, 255, 255, 0.08);
       }
 
       .chat-message .chat-typing {
@@ -3883,6 +4034,50 @@
       }
 
       /* FLOATING BRAIN FAB */
+      .task-fab {
+        position: fixed;
+        right: 24px;
+        bottom: 164px;
+        z-index: 1101;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: none;
+        background: #1e88ff;
+        color: #ffffff;
+        font-size: 28px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 16px 32px rgba(30, 136, 255, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .task-fab:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 40px rgba(30, 136, 255, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.18) inset;
+        background: #3b97ff;
+      }
+
+      .task-fab.modal-open,
+      .task-fab.is-hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      body.chat-open .task-fab {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        display: none;
+        transition: none;
+      }
+
       .brain-fab {
         position: fixed;
         right: 24px;
@@ -3914,11 +4109,7 @@
         cursor: pointer;
         box-shadow: var(--glow);
         backdrop-filter: blur(18px) saturate(140%);
-        transition:
-          transform 0.16s ease,
-          box-shadow 0.16s ease,
-          background 0.16s ease,
-          opacity 0.3s ease;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         opacity: 1;
         pointer-events: auto;
       }
@@ -4913,6 +5104,7 @@
         display: flex;
         flex-direction: column;
         will-change: transform, opacity;
+        color: var(--text-primary);
       }
 
       .calendar-container.view-enter {
@@ -5140,7 +5332,7 @@
         height: 12px;
         background: #ea4335;
         border-radius: 50%;
-        border: 2px solid white;
+        border: 2px solid var(--bg-card);
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
       }
 
@@ -5153,10 +5345,11 @@
         font-size: 11px;
         font-weight: 600;
         color: #ea4335;
-        background: white;
+        background: var(--bg-card);
         padding: 2px 6px;
         border-radius: 4px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        color: var(--text-primary);
       }
 
       .current-time-line.week {
@@ -5515,8 +5708,9 @@
       }
 
       .agenda-day.today {
-        border-color: rgba(99, 102, 241, 0.5);
-        box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.35);
+        border-color: transparent;
+        background: rgba(99, 102, 241, 0.12);
+        box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.3);
       }
 
       .agenda-day.selected {
@@ -6027,6 +6221,12 @@
         box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
       }
 
+      body.dark-mode .month-grid {
+        background: color-mix(in srgb, var(--bg-card) 94%, transparent 6%);
+        border-color: rgba(255, 255, 255, 0.05);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.015);
+      }
+
       /* Modo claro: aumenta contraste da grade mensal (bordas do grid + cards do dia) */
       body:not(.dark-mode) .month-grid {
         border: 1px solid #e0e0e0 !important;
@@ -6135,7 +6335,7 @@
       .month-day {
         position: relative;
         background: color-mix(in srgb, var(--bg-card) 98%, transparent 2%);
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        border: 1px solid transparent;
         border-radius: 6px;
         min-height: 0;
         padding: 4px 6px;
@@ -6148,6 +6348,11 @@
           border-color 0.18s ease;
         overflow: hidden;
         outline: none;
+      }
+
+      body.dark-mode .month-day {
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: color-mix(in srgb, var(--bg-card) 97%, transparent 3%);
       }
 
       body:not(.dark-mode) .month-day:not(.today):not(.holiday) {
@@ -6163,13 +6368,13 @@
       }
 
       .month-day.today {
-        border-color: var(--accent);
+        border-color: transparent;
         background: color-mix(
           in srgb,
           var(--surface-strong) 94%,
           var(--accent) 6%
         );
-        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
+        box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
       }
 
       .month-day.today::after {
@@ -6177,7 +6382,7 @@
         position: absolute;
         inset: 0;
         border-radius: 8px;
-        box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 20%, transparent);
+        box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent);
         pointer-events: none;
       }
 
@@ -6189,7 +6394,7 @@
 
       .month-day:hover {
         background: color-mix(in srgb, var(--bg-card) 98%, transparent 2%);
-        border-color: rgba(255, 255, 255, 0.16);
+        border-color: rgba(255, 255, 255, 0.08);
       }
 
       body:not(.dark-mode) .month-day:hover {
@@ -6778,7 +6983,7 @@
         position: absolute;
         width: 16px;
         height: 16px;
-        background: white;
+        background: var(--text-primary);
         border-radius: 50%;
         top: 2px;
         left: 2px;
@@ -7764,15 +7969,59 @@
       .zen-chat-input-wrapper input { flex: 1; background: var(--bg-main); border: 1px solid var(--border-color); color: white; padding: 10px 14px; border-radius: 20px; outline: none; font-family: inherit; font-size: 13px; }
       .zen-chat-input-wrapper input:focus { border-color: var(--primary); }
 
-      .daily-notes-modal-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 10000; animation: fadeIn 0.3s ease; }
-      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-      .daily-notes-modal { background: #10141C; width: 640px; max-width: 90vw; border-radius: 20px; border: 1px solid color-mix(in srgb, var(--border-color) 80%, transparent); padding: 30px; box-shadow: 0 24px 48px rgba(0,0,0,0.5); }
-      .daily-notes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 20px; font-weight: 600; font-family: 'Google Sans'; color: #fff; }
-      .daily-notes-content textarea { width: 100%; height: 160px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); color: #fff; border-radius: 12px; padding: 18px; margin-bottom: 24px; resize: none; font-family: 'Inter', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; }
-      .daily-notes-content textarea:focus { border-color: var(--primary); }
-      .reminders-list { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
-      .reminder-item { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-primary); }
-      .reminder-item:last-child { border-bottom: none; }
+      .context-panel-body { padding: 24px; flex: 1; display: flex; flex-direction: column; gap: 18px; }
+      .context-notes-title { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: var(--text-color); opacity: 0.7; }
+      .context-notes-textarea {
+        border: none !important;
+        background-color: transparent !important;
+        font-family: inherit;
+        font-size: 14px;
+        line-height: 28px;
+        background-image: repeating-linear-gradient(
+          transparent,
+          transparent 27px,
+          var(--border-color, rgba(128, 128, 128, 0.2)) 27px,
+          var(--border-color, rgba(128, 128, 128, 0.2)) 28px
+        );
+        background-attachment: local;
+        padding: 4px 0 0 0;
+        width: 100%;
+        min-height: 150px;
+        resize: none;
+        outline: none;
+        box-shadow: none;
+        color: var(--text-color);
+        border-radius: 0;
+      }
+      .context-notes-textarea:focus {
+        border-color: transparent;
+      }
+      .context-reminders { background: transparent; border: none; box-shadow: none; border-radius: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+      .context-reminders-title { font-size: 11px; color: var(--text-color); font-weight: 700; letter-spacing: 0.08em; opacity: 0.7; }
+      .context-reminders-list { display: flex; flex-direction: column; gap: 10px; }
+      .context-reminder-row { display: flex; align-items: center; gap: 10px; }
+      .context-reminder-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 8px rgba(0,0,0,0.08); }
+      .context-reminder-input {
+        flex: 1;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        color: var(--text-color);
+        border-radius: 0;
+        padding: 6px 2px;
+        font-size: 13px;
+        outline: none !important;
+        transition: border-color 0.2s;
+      }
+      .context-reminder-input:-webkit-autofill,
+      .context-reminder-input:-webkit-autofill:hover,
+      .context-reminder-input:-webkit-autofill:focus,
+      .context-reminder-input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+        -webkit-text-fill-color: var(--text-color) !important;
+        transition: background-color 5000s ease-in-out 0s;
+      }
+      .context-reminder-input:focus { border-bottom-color: var(--border-color); background: transparent; }
 
       /* RESET FINAL DE BORDAS NEUROTASK */
       body:not(.light-mode) .week-hour-slot-bg, 
@@ -7972,13 +8221,6 @@
           </span>
           <span>Configurações</span>
         </div>
-        <button class="create-btn" id="dashboardNewTaskBtn" style="margin: 16px; margin-top: 32px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          <span>Nova Tarefa</span>
-        </button>
       </div>
     </div>
 
@@ -7990,11 +8232,6 @@
         
         <!-- ÁREA ESQUERDA: Contexto/Brand -->
         <div style="display: flex; align-items: center; gap: 16px;">
-          <!-- Hambúrguer Toggle (Mantido à esquerda) -->
-          <button id="globalNavToggle" class="panel-toggle-btn" onclick="toggleLeftMenu()" title="Alternar Menu" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-primary); padding: 6px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;">
-            <svg id="navToggleIcon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-          </button>
-          
           <h1 style="font-family: 'Google Sans', sans-serif; display: flex; align-items: center; gap: 10px; margin: 0; font-size: 20px; font-weight: 500; color: var(--text-primary);">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--teal);">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -9274,15 +9511,30 @@
              <button class="icon-btn" id="minimizeChevronBtn" title="Minimizar Painel" style="background:transparent;border-color:transparent; pointer-events:none; transition: transform 0.3s ease;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
              </button>
-             <button class="icon-btn" onclick="openDailyNotesModal(); event.stopPropagation();" title="Caderno Diário" style="background:var(--hover-bg);border-color:transparent;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
-             </button>
            </div>
         </div>
         
-        <div style="padding: 24px; flex: 1;">
-          <div style="color:var(--text-secondary);font-size:13px;line-height:1.5;text-align:center;margin-top:20px;">
-            Este espaço é dinâmico. Anotações para a tarefa atual, integrações ou contexto auxiliar aparecerão aqui.
+        <div class="context-panel-body">
+          <div style="width: 0; height: 0; overflow: hidden; position: absolute; z-index: -1;">
+            <input type="text" name="fake_email_trap" autocomplete="username" tabindex="-1">
+            <input type="password" name="fake_password_trap" autocomplete="current-password" tabindex="-1">
+          </div>
+          <div class="context-notes-title">ANOTAÇÕES DO DIA</div>
+          <textarea
+            id="contextNotesTextarea"
+            class="context-notes-textarea"
+            placeholder="Para interpretação por IA: Reflexões de Hoje... Como tem sido seu foco? Alguma ideia solta?"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            data-lpignore="true"
+            data-1p-ignore="true"
+            data-form-type="other"
+          ></textarea>
+          <div class="context-reminders">
+            <div class="context-reminders-title">LEMBRETES DO DIA</div>
+            <div class="context-reminders-list" id="contextRemindersList"></div>
           </div>
         </div>
 
@@ -9944,12 +10196,9 @@
     <div class="chat-panel" id="chatPanel">
       <div class="chat-header">
         <div class="chat-title">
-          <img
-            src="/img/brain.svg"
-            alt="Neuro IA"
-            style="width: 18px; height: 18px"
-          />
-          <span>Neuro IA</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
         </div>
         <button class="close-chat close-chat-btn" onclick="closeAIChat()">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -9980,6 +10229,17 @@
         <button class="send-btn" onclick="sendMessage()">➤</button>
       </div>
     </div>
+
+    <!-- FLOATING TASK FAB -->
+    <button
+      type="button"
+      class="task-fab"
+      id="taskFab"
+      title="Nova tarefa"
+      onclick="openNewTask(event)"
+    >
+      +
+    </button>
 
     <!-- FLOATING BRAIN FAB -->
     <button
@@ -12210,6 +12470,7 @@
         const chatPanel = document.getElementById("chatPanel");
         const taskPanel = document.getElementById("taskDetailsPanel");
         const brainFab = document.getElementById("brainFab");
+        const taskFab = document.getElementById("taskFab");
 
         if (document.activeElement) {
           document.activeElement.blur();
@@ -12227,6 +12488,7 @@
 
         // Remove classe de bloqueio de scroll do body
         document.body.classList.remove("panel-open");
+        document.body.classList.remove("chat-open");
 
         // Limpa estado global de tarefa
         currentTaskDetails = null;
@@ -12234,6 +12496,7 @@
 
         // Mostra botão NeuroIA novamente
         if (brainFab) brainFab.classList.remove("hidden");
+        if (taskFab) taskFab.classList.remove("is-hidden");
       }
 
       // ==================== CHAT TOGGLE ====================
@@ -12244,17 +12507,22 @@
         chatOpen = !chatOpen;
         const chatPanel = document.getElementById("chatPanel");
         const brainFab = document.getElementById("brainFab");
+        const taskFab = document.getElementById("taskFab");
 
         if (chatOpen) {
           chatPanel.style.display = "flex";
           chatPanel.classList.add("open");
           brainFab?.classList.add("hidden");
+          taskFab?.classList.add("is-hidden");
           document.body.classList.add("panel-open");
+          document.body.classList.add("chat-open");
         } else {
           chatPanel.classList.remove("open");
           chatPanel.style.display = "none";
           brainFab?.classList.remove("hidden");
+          taskFab?.classList.remove("is-hidden");
           document.body.classList.remove("panel-open");
+          document.body.classList.remove("chat-open");
         }
       }
 
@@ -12266,9 +12534,14 @@
       function openAssistantChat() {
         // PRIMEIRA LINHA OBRIGATÓRIA: Limpar todos os painéis
         closeAllSidePanels();
+
+        if (typeof window.getPainelContextualDados === "function") {
+          window.neuroIAContextualData = window.getPainelContextualDados();
+        }
         
         const chatPanel = document.getElementById("chatPanel");
         const brainFab = document.getElementById("brainFab");
+        const taskFab = document.getElementById("taskFab");
         if (!chatPanel) return;
         
         // Agora abre apenas o chat
@@ -12276,7 +12549,9 @@
         chatPanel.style.display = "flex";
         chatPanel.classList.add("open");
         brainFab?.classList.add("hidden");
+        taskFab?.classList.add("is-hidden");
         document.body.classList.add("panel-open");
+        document.body.classList.add("chat-open");
         
         setTimeout(() => {
           const input = document.getElementById("chatInput");
@@ -13154,15 +13429,23 @@
       // Funções globais para controle de visibilidade da NeuroIA
       function hideNeuroAI() {
         const neuroBtn = document.getElementById("brainFab");
+        const taskFab = document.getElementById("taskFab");
         if (neuroBtn) {
           neuroBtn.classList.add("modal-open");
+        }
+        if (taskFab) {
+          taskFab.classList.add("modal-open");
         }
       }
 
       function showNeuroAI() {
         const neuroBtn = document.getElementById("brainFab");
+        const taskFab = document.getElementById("taskFab");
         if (neuroBtn) {
           neuroBtn.classList.remove("modal-open");
+        }
+        if (taskFab) {
+          taskFab.classList.remove("modal-open");
         }
       }
 
@@ -13907,9 +14190,19 @@
           })
           .slice(0, 25);
 
-        return titles.length
+        const baseContext = titles.length
           ? `Tarefas atuais do usuário (amostra):\n${titles.join("\n")}`
           : "O usuário não possui tarefas carregadas no momento.";
+
+        const painelDados =
+          window.neuroIAContextualData ||
+          (typeof window.getPainelContextualDados === "function"
+            ? window.getPainelContextualDados()
+            : null);
+
+        if (!painelDados) return baseContext;
+
+        return `${baseContext}\n\nContexto do Painel Contextual (JSON): ${JSON.stringify(painelDados)}`;
       }
 
       async function sendMessageToExternalLLM({ userMessage, contextText }) {
@@ -14623,6 +14916,10 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
           
           // Remove marcadores de código markdown (``` blocos)
           finalText = finalText.replace(/```[\s\S]*?```/g, '');
+
+          // Remove botões ruidosos embutidos nas respostas
+          finalText = finalText.replace(/<button[^>]*>\s*Copiar\s*<\/button>/gi, '');
+          finalText = finalText.replace(/<button[^>]*>\s*Criar\s*Tarefa\s*<\/button>/gi, '');
           
           // Remove linhas vazias consecutivas
           finalText = finalText.replace(/\n{3,}/g, '\n\n');
@@ -23037,43 +23334,87 @@ CONTEXTO: O usuário pode comandar por voz ou texto. Aja imediatamente quando id
     <!-- Módulos de IA NeuroTask -->
     <script type="module" src="/js/modules/aiDashboard.js"></script>
     <script>
-window.openDailyNotesModal = function() {
-  let modal = document.getElementById('dailyNotesOverlay');
-  if (!modal) {
-    const html = `
-    <!-- Daily Notes Modal -->
-    <div class="daily-notes-modal-overlay" id="dailyNotesOverlay" onclick="if(event.target===this) closeDailyNotesModal()">
-      <div class="daily-notes-modal">
-         <div class="daily-notes-header">
-            <div style="display:flex;align-items:center;gap:12px;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
-              <span>Notas e Reflexões Diárias</span>
-            </div>
-            <button class="icon-btn" style="border:none;background:transparent;" onclick="closeDailyNotesModal()" title="Fechar">×</button>
-         </div>
-         <div class="daily-notes-content">
-            <textarea placeholder="Para interpretação por IA: Reflexões de Hoje... Como tem sido seu foco? Alguma ideia solta?"></textarea>
-            <div class="reminders-list">
-               <div style="font-size:11px; color:var(--text-secondary); margin-bottom:12px; font-weight:700; letter-spacing:0.04em;">LEMBRETES DO DIA</div>
-               <div class="reminder-item"><div style="width:10px;height:10px;border-radius:50%;background:#34d399;box-shadow:0 0 8px rgba(52,211,153,0.4);"></div> Planejamento Estratégico</div>
-               <div class="reminder-item"><div style="width:10px;height:10px;border-radius:50%;background:#a78bfa;box-shadow:0 0 8px rgba(167,139,250,0.4);"></div> Sessão de Protótipo de UI</div>
-               <div class="reminder-item"><div style="width:10px;height:10px;border-radius:50%;background:#fbbf24;box-shadow:0 0 8px rgba(251,191,36,0.4);"></div> Chamada Cliente</div>
-            </div>
-         </div>
-         <div style="display:flex; justify-content:flex-end; margin-top:24px;">
-           <button class="modal-btn modal-btn-primary" onclick="closeDailyNotesModal(); if(typeof showToast === 'function') showToast('Notas salvas com sucesso!')" style="padding:12px 24px;font-size:14px;border-radius:8px;">Salvar Progresso</button>
-         </div>
-      </div>
-    </div>`;
-    document.body.insertAdjacentHTML('beforeend', html);
-    modal = document.getElementById('dailyNotesOverlay');
-  }
-  modal.style.display = 'flex';
+const reminderColors = ['#34d399', '#a78bfa', '#fbbf24', '#f472b6', '#60a5fa'];
+
+function createReminderRow(index, value) {
+  const row = document.createElement('div');
+  row.className = 'context-reminder-row';
+
+  const dot = document.createElement('div');
+  dot.className = 'context-reminder-dot';
+  dot.style.background = reminderColors[index % reminderColors.length];
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'context-reminder-input';
+  input.setAttribute('readonly', 'true');
+  input.onfocus = function() {
+    this.removeAttribute('readonly');
+  };
+  input.name = `lembrete_${Math.random().toString(36).substring(7)}`;
+  input.setAttribute('autocomplete', 'one-time-code');
+  input.setAttribute('data-lpignore', 'true');
+  input.setAttribute('data-1p-ignore', 'true');
+  input.setAttribute('data-form-type', 'other');
+  input.setAttribute('spellcheck', 'false');
+  input.value = value || '';
+
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Backspace' && input.value === '') {
+      const currentItem = input.parentElement;
+      const listContainer = currentItem ? currentItem.parentElement : null;
+      const previousItem = currentItem ? currentItem.previousElementSibling : null;
+
+      if (listContainer && listContainer.children.length > 1) {
+        event.preventDefault();
+        if (previousItem) {
+          const previousInput = previousItem.querySelector('input');
+          if (previousInput) previousInput.focus();
+        }
+        currentItem.remove();
+      }
+      return;
+    }
+
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    const list = document.getElementById('contextRemindersList');
+    if (!list) return;
+    const nextIndex = list.querySelectorAll('.context-reminder-row').length;
+    const nextRow = createReminderRow(nextIndex, '');
+    list.appendChild(nextRow);
+    const nextInput = nextRow.querySelector('input');
+    if (nextInput) nextInput.focus();
+  });
+
+  row.appendChild(dot);
+  row.appendChild(input);
+  return row;
+}
+
+function initContextPanelReminders() {
+  const list = document.getElementById('contextRemindersList');
+  if (!list || list.children.length > 0) return;
+  list.appendChild(createReminderRow(0, ''));
+}
+
+window.getPainelContextualDados = function() {
+  const notesEl = document.getElementById('contextNotesTextarea') || document.querySelector('textarea');
+  const reminders = Array.from(document.querySelectorAll('.context-reminder-input'))
+    .map((input) => input.value.trim())
+    .filter((value) => value.length > 0);
+
+  return {
+    anotacoes: notesEl ? notesEl.value.trim() : '',
+    lembretes: reminders
+  };
 };
-window.closeDailyNotesModal = function() {
-  const overlay = document.getElementById('dailyNotesOverlay');
-  if (overlay) overlay.style.display = 'none';
+
+window.getContextPanelData = function() {
+  return window.getPainelContextualDados();
 };
+
+initContextPanelReminders();
 
 setTimeout(() => {
   if (typeof calendarEvents !== 'undefined') {

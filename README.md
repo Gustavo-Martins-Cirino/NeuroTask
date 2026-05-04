@@ -1,475 +1,112 @@
-# 🧠 NeuroTask - Cognitive Productivity Manager
+# 🧠 NeuroTask
 
-**Versão Atual:** 1.0.0  
-**Autor:** Gustavo Cirino  
-**Link do Repositório:** [Cole o link do seu repositório público do GitHub aqui]
+> **Seu assistente cognitivo e painel de produtividade inteligente.** Gerencie seu tempo, não apenas suas tarefas.
 
-## 🎯 O Problema Real
-Muitas pessoas, especialmente estudantes, trabalhadores de alta performance e indivíduos neurodivergentes (como com TDAH), sofrem com a sobrecarga cognitiva e a paralisia de decisão ao tentar organizar suas rotinas. Listas de tarefas infinitas geram ansiedade e não refletem o tempo real disponível no dia, resultando em procrastinação crônica e frustração.
-
-## 👥 Público-Alvo
-Estudantes, profissionais e pessoas neurodivergentes que possuem dificuldade de rotina, precisando de uma ferramenta visual, simples e inteligente para planejamento e diminuição de carga mental.
-
-## 💡 A Proposta de Solução
-O NeuroTask resolve (ou ameniza) essa dor propondo uma abordagem de **Time-Blocking (Blocos de Tempo)** aliada a análises comportamentais de **Inteligência Artificial**. Em vez de uma simples lista, o usuário arrasta suas tarefas diretamente para a agenda, limitando o agendamento ao tempo fisicamente disponível, recebendo feedback prático do seu Coach de IA sobre padrões de procrastinação e ritmo de trabalho.
-
-## 🎯 Visão Geral
-
-**NeuroTask** é um sistema de produtividade cognitiva que combina **time-blocking**, **IA generativa** e **análise comportamental** para otimizar sua gestão de tarefas e energia mental.
-
-### 📚 Documentação
-
-- Consulte a documentação completa do projeto em `DOCUMENTACAO_LONGA.md`.
-
-### 🌟 Diferenciais
-
-- 🤖 **Coach de IA com Groq API (Llama 3)**: Análises reais de produtividade, padrões e recomendações personalizadas
-- 📅 **Time-Blocking Visual**: Drag & Drop intuitivo para agendar tarefas
-- 📊 **Análises Cognitivas**: Identifica sobrecarga mental e otimiza distribuição de tarefas
-- 💬 **Chat Interativo**: Converse com um coach especializado em produtividade
-- 📈 **Gráficos em Tempo Real**: Visualize sua evolução com Chart.js
-- 🏷️ **Sistema de Tags**: Organize tarefas por contextos (trabalho, pessoal, estudos)
+![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=java&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.7-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![LangChain4j](https://img.shields.io/badge/AI-LangChain4j-000000?style=for-the-badge)
+![Google Gemini](https://img.shields.io/badge/Google_Gemini-1.5_Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)
 
 ---
 
-## 🛠️ Stack Tecnológica
+## 📖 Sobre o Projeto
 
-### Backend
+O **NeuroTask** é uma plataforma avançada de gestão de tarefas com foco em *time-blocking* projetada para otimizar sua rotina cognitiva. Ao contrário dos gerenciadores convencionais que apenas listam o que precisa ser feito em infinitos *backlogs*, o NeuroTask integra o planejamento espacial do seu dia em um calendário interativo, ajudando você a alocar energia visualmente onde realmente importa e evitando conflitos de horários.
 
-- **Java 21** (LTS)
-- **Spring Boot 3.5.7**
-- **MySQL**
-- **LangChain4j 0.36.2** (Integração com IA)
-- **Groq API / Llama 3** (Modelo de IA de alta velocidade)
-- **JPA/Hibernate**
-- **Lombok**
-
-### Frontend
-
-- **Vanilla JavaScript ES6+** (Zero frameworks)
-- **Chart.js 4.4.0** (Gráficos)
-- **CSS Grid/Flexbox**
-- **Drag & Drop API nativa**
-- **Dark/Light theme**
+Nascido da necessidade de reduzir a sobrecarga mental e os entraves da procrastinação, o sistema não apenas organiza seus afazeres, mas age como um parceiro ativo e inteligente. Ele analisa suas métricas de desempenho, compreende os domínios de prioridade das tarefas e oferece feedbacks e _insights_ precisos por meio de uma inteligência artificial incorporada. É a solução definitiva para profissionais e estudantes que buscam sair do ciclo puramente reativo para um estado de foco produtivo profundo.
 
 ---
 
-## 🚀 Início Rápido
+## ✨ Funcionalidades Principais
 
-### 1️⃣ Pré-requisitos
+- 📅 **Calendário Interativo & Time-Blocking**: Motor robusto de _drag & drop_ que permite puxar as tarefas da fila de pendências diretamente para horários específicos no dia, contando com validação anti-conflito em tempo real.
+- 🌓 **Interface Fluida (Light/Dark Mode)**: Design moderno e enxuto com suporte nativo a variação de temas, centrado numa refinada navegação por um **Dock lateral** (menu) que responde rapidamente às suas escolhas de tela.
+- 🧠 **Neuro IA (Assistente Inteligente)**: O coração lógico do sistema na obtenção de insights de produtividade. O assistente de inteligência artificial analisa seus hábitos, gera _scores_ de saúde de planejamento e recomenda as próximas ações mais assertivas via chat ou estatística.
+- 📊 **Dashboards e Analytics**: Análise profunda sobre performance do dia, distribuição de prioridades, status e eficiência em tempo médio de ciclo.
 
+---
+
+## 🏗️ Arquitetura e Integrações
+
+O NeuroTask combina alta eficiência em uma separação clara de papéis arquiteturais utilizando os melhores padrões contemporâneos:
+- **Frontend:** Desenvolvido nativamente em **Vanilla JavaScript (ES6 Modules)**, suportado por uma estrutura sólida em HTML5 e CSS flexível, garantindo fluidez e velocidade de renderização, sem o peso excessivo de frameworks SPAs de terceiros.
+- **Backend:** Fornecido por uma API RESTful escalável modelada em **Spring Boot** (Java 21), orquestrando as manipulações de entidades transacionais junto com um banco de dados **MySQL**.
+
+### 🔌 Integrações de API
+
+A inteligência da aplicação é maximizada pela comunicação constante com serviços externos altamente escaláveis:
+- **APIs de Inteligência Artificial (Google Gemini):** Através da infraestrutura do `LangChain4j`, a base de _analytics_ da aplicação é alicerçada no **Gemini 1.5 Flash**. Isso garante _parsing_ rápido de dados contextuais e processamento de linguagem natural com alta confiabilidade para gerar os diagnósticos de produtividade das jornadas do usuário.
+- **APIs Públicas Transacionais (ex: BrasilAPI):** A plataforma faz também consumo de serviços abertos de contexto logístico e feriados nacionais, complementando de maneira integral dados cruciais do sistema para certificar entregas baseadas em restrições de rotinas locais ou datas úteis, reforçando os fundamentos estipulados para a entrega intermediária do projeto.
+
+---
+
+## ⚙️ Processo de Engenharia e Qualidade
+
+Nosso desenvolvimento segue processos cuidadosos de qualidade e gestão de demanda, assegurando a robustez da evolução do software:
+- 🎯 **Rastreamento via GitHub Issues:** Todas as tarefas de back-end, implementações visuais ou correções são modeladas, documentadas e rastreadas pelas _issues_ do repositório, garantindo transparência no histórico evolutivo.
+- 🌿 **Estratégia de Branching Segura:** O versionamento do código-fonte gira centralmente ao redor do conceito de isolamento de *features*. Um grande exemplo prático é a estruturação e avanço via branch `entrega-intermediaria` para encapsular a evolução segura de novas integrações de API sem fragmentar a base operacional em produção.
+- 🔀 **Pull Requests (PRs):** Garantia de revisão de código, qualidade semântica e rastreabilidade nas aprovações de *merge*.
+- 🧪 **Testes de Integração:** Mecanismos de validação rigorosa que disparam execuções conjuntas, validando especialmente se as rotas da nossa REST API e fluxos de injeção externa (`Gemini` e públicas) se mantém intactos nas esteiras do desenvolvimento.
+
+---
+
+## 🚀 Como Executar (Setup Local)
+
+Para inicializar a arquitetura e rodar a aplicação em sua máquina local para novos desenvolvimentos:
+
+### Pré-requisitos
+- JDK 21 instalado
+- MySQL em execução local `(localhost:3306)`
+- Chave de API ativada proveniente do Google AI Studio.
+
+### Passos
+
+1. **Clone o repositório na sua máquina:**
 ```bash
-✅ Java 21
-✅ MySQL (localhost)
-✅ Maven (incluído via mvnw)
-✅ Groq API Key (grátis)
+git clone https://github.com/seu-usuario/myday-productivity.git
+cd myday-productivity
 ```
 
-### 2️⃣ Configurar Banco de Dados
+2. **Configure a Variável de Ambiente (API Key IA):**
+A IA precisa da chave do Groq de modo seguro. Em seu terminal, execute o export de ambiente:
 
-O projeto está configurado para conectar no MySQL em `localhost:3306` e criar o database automaticamente (se não existir).
+**Windows (CMD/PowerShell)**
+```bash
+set GROQ_API_KEY=sua_hash_do_groq_aqui
+```
+**Linux / MacOS**
+```bash
+export GROQ_API_KEY="sua_hash_do_groq_aqui"
+```
 
-### 3️⃣ Obter API Key da Groq
+3. **Inicie o serviço de Banco de Dados:**
+A aplicação autoconfigurará as tabelas do _schema_ (como `neurotask`) mediante os dados cadastrados em `src/main/resources/application.properties` (usuário base root, ajuste caso possua senha local específica diferentemente de root).
 
-1. Acesse: https://console.groq.com/keys
-2. Clique em "Create API Key"
-3. Copie a chave gerada (ela começa com `gsk_`)
-
-### 4️⃣ Configurar Variável de Ambiente
-
-```cmd
-# Windows (CMD)
-set OPENAI_API_KEY=SuaAPIKeyAqui
-
-# Windows (PowerShell)
-$env:OPENAI_API_KEY="SuaAPIKeyAqui"
+4. **Inicie o servidor de dependências Spring via Maven Wrapper:**
+Na raiz do projeto execute (ele baixará tudo sozinho):
+```bash
+# Windows
+mvnw.cmd spring-boot:run
 
 # Linux/Mac
-export OPENAI_API_KEY=SuaAPIKeyAqui
+./mvnw spring-boot:run
 ```
 
-### 5️⃣ Executar Aplicação
-
-```bash
-cd myday-productivity
-mvnw spring-boot:run
+5. **Acesso à Aplicação:**
+Uma vez que o banner de log for sinalizado ativo com sucesso pelo Netty, a interface do NeuroTask será montada estaticamente usando o *embedded server*. Abra seu navegador em:
 ```
-
-### 6️⃣ Acessar
-
-Abra: **http://localhost:8080**
-
-### 7️⃣ Qualidade de Código e Testes (CI/CD)
-
-Este projeto utiliza Integração Contínua via GitHub Actions para assegurar o ciclo de vida da aplicação.
-
-**Como rodar os testes automatizados:**
-(Cobre caminhos felizes, validação de regras de negócios e erros de inputs)
-```bash
-./mvnw test
-```
-
-**Como rodar a Análise Estática (Linting):**
-(Utiliza Checkstyle para analisar a qualidade e padronização do código fonte)
-```bash
-./mvnw checkstyle:check -Dcheckstyle.config.location=checkstyle.xml
+http://localhost:8080
 ```
 
 ---
 
-## 📖 Como Usar
+## 🌐 Deploy
 
-### 1. **Adicionar Tarefas ao Backlog**
+Acompanhe as evoluções testáveis sob ambiente de produção estável no link hospedado.
 
-- Digite título, descrição e prioridade
-- Clique em "+ Adicionar"
-- As tarefas ficam no status `PENDING`
+🔗 **[Link a ser desenvolvido]**
 
-### 2. **Time-Blocking (Drag & Drop)**
-
-- Arraste tarefas do backlog para slots de horário
-- Tarefas mudam para status `SCHEDULED`
-- Clique na tarefa no calendário para completar
-
-### 3. **Análise com IA**
-
-- Clique em "Analisar com IA"
-- Escolha o tipo:
-  - **📊 Produtividade**: Análise geral
-  - **🔍 Padrões**: Identifica comportamentos
-  - **💡 Dicas**: Recomendações acionáveis
-
-### 4. **Chat com Coach de IA**
-
-- Digite perguntas no campo de chat
-- Exemplos:
-  - "Como organizar melhor meu dia?"
-  - "Tenho muitas tarefas atrasadas, o que fazer?"
-  - "Qual o melhor horário para tarefas de alta prioridade?"
-
-### 5. **Visualizar Estatísticas**
-
-- Gráfico de rosca mostra distribuição de tarefas
-- Estatísticas atualizadas em tempo real
 
 ---
-
-## 🎨 Funcionalidades Implementadas
-
-### ✅ Gestão de Tarefas
-
-- [x] CRUD completo de tarefas
-- [x] Backlog com prioridades (HIGH, MEDIUM, LOW)
-- [x] Time-blocking visual (8h-20h)
-- [x] Drag & Drop nativo
-- [x] Status: PENDING → SCHEDULED → DONE
-- [x] Mover tarefas de volta ao backlog
-
-### ✅ Inteligência Artificial
-
-- [x] Integração com Google Gemini via LangChain4j
-- [x] 3 tipos de análise (Produtividade, Padrões, Recomendações)
-- [x] Chat interativo com contexto das tarefas
-- [x] Prompts otimizados para análise cognitiva
-- [x] Parse estruturado de respostas da IA
-
-### ✅ Visualizações
-
-- [x] Gráfico de rosca (Chart.js)
-- [x] Estatísticas em tempo real
-- [x] Taxa de conclusão
-- [x] Distribuição por status
-
-### ✅ Sistema de Tags
-
-- [x] Criar tags com cores customizadas
-- [x] Relacionamento Many-to-Many com tarefas
-- [x] Endpoints REST completos
-
-### ✅ UX/UI
-
-- [x] Dark/Light theme toggle
-- [x] Design glassmorphism
-- [x] Responsivo
-- [x] Feedback visual de ações
-
----
-
-## 🔌 API Endpoints
-
-### 📋 Tarefas (`/api/tasks`)
-
-```http
-GET    /api/tasks                  # Listar todas
-POST   /api/tasks                  # Criar tarefa
-PATCH  /api/tasks/{id}/move        # Mover para calendário
-PATCH  /api/tasks/{id}/complete    # Marcar como concluída
-PUT    /api/tasks/{id}             # Atualizar tarefa
-DELETE /api/tasks/{id}             # Remover tarefa
-GET    /api/tasks/stats            # Estatísticas
-GET    /api/tasks/status/{status}  # Filtrar por status
-PATCH  /api/tasks/{id}/backlog     # Voltar ao backlog
-```
-
-### 🤖 IA (`/api/ai`)
-
-```http
-POST /api/ai/analyze  # Análise de produtividade
-POST /api/ai/chat     # Chat com coach
-```
-
-**Request Body (analyze):**
-
-```json
-{
-  "analysisType": "productivity",
-  "timeRange": "today"
-}
-```
-
-**Request Body (chat):**
-
-```json
-{
-  "message": "Como posso melhorar minha produtividade?"
-}
-```
-
-### 🏷️ Tags (`/api/tags`)
-
-```http
-GET    /api/tags       # Listar todas
-POST   /api/tags       # Criar tag
-GET    /api/tags/{id}  # Buscar por ID
-DELETE /api/tags/{id}  # Remover tag
-```
-
----
-
-## 🧪 Testando a IA
-
-### Exemplo 1: Análise de Produtividade
-
-```bash
-curl -X POST http://localhost:8080/api/ai/analyze \
-  -H "Content-Type: application/json" \
-  -d '{
-    "analysisType": "productivity",
-    "timeRange": "today"
-  }'
-```
-
-### Exemplo 2: Chat
-
-```bash
-curl -X POST http://localhost:8080/api/ai/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "message": "Tenho 5 tarefas de alta prioridade, como organizar?"
-  }'
-```
-
----
-
-## 📊 Arquitetura
-
-```
-┌─────────────────────────────────────────────────────┐
-│                   Frontend (HTML/JS)                 │
-│  • Drag & Drop • Chart.js • Fetch API               │
-└────────────────┬────────────────────────────────────┘
-                 │ REST API
-┌────────────────▼────────────────────────────────────┐
-│              Controller Layer                        │
-│  TaskController • AIController • TagController       │
-└────────────────┬────────────────────────────────────┘
-                 │
-┌────────────────▼────────────────────────────────────┐
-│               Service Layer                          │
-│  TaskService • ProductivityAnalysisService           │
-│  TagService                                          │
-└────────────────┬────────────────────────────────────┘
-                 │
-┌────────────────▼────────────────────────────────────┐
-│          Repository Layer (JPA)                      │
-│  TaskRepository • TagRepository                      │
-└────────────────┬────────────────────────────────────┘
-                 │
-┌────────────────▼────────────────────────────────────┐
-│            PostgreSQL Database                       │
-│  tb_tasks • tags • task_tags                        │
-└──────────────────────────────────────────────────────┘
-
-           External API
-┌──────────────────────────────────────────────────────┐
-│         Google Gemini AI (via LangChain4j)           │
-│  Gemini 1.5 Flash • ChatLanguageModel                │
-└──────────────────────────────────────────────────────┘
-```
-
----
-
-## 🎓 Conceitos Aplicados
-
-### Design Patterns
-
-- **Repository Pattern**: Abstração de acesso a dados
-- **DTO Pattern**: Transferência de dados entre camadas
-- **Service Layer**: Lógica de negócio centralizada
-- **Dependency Injection**: Spring IoC Container
-
-### Boas Práticas
-
-- **Separation of Concerns**: Controllers apenas roteiam, Services contêm lógica
-- **Single Responsibility**: Cada classe tem uma responsabilidade única
-- **Open/Closed Principle**: Aberto para extensão, fechado para modificação
-- **Clean Code**: Nomes descritivos, métodos pequenos, SOLID
-
-### Tecnologias Modernas
-
-- **Java Records**: DTOs imutáveis (Java 14+)
-- **LangChain4j**: Framework para aplicações LLM
-- **Chart.js**: Gráficos declarativos e responsivos
-- **Native Drag & Drop**: Sem dependências jQuery/React
-
----
-
-## 🔐 Segurança
-
-### Implementado
-
-- ✅ Validação de entrada com Bean Validation
-- ✅ Exception handling centralizado
-- ✅ Variáveis de ambiente para secrets
-
----
-
-## 📦 Implementações Recentes (Novembro 2025)
-
-### ✅ Sistema de Analytics Completo
-
-**AnalyticsService + AnalyticsController** com 7 endpoints:
-
-- `GET /api/analytics/stats` - Estatísticas gerais
-- `GET /api/analytics/today` - Métricas do dia
-- `GET /api/analytics/priority` - Distribuição por prioridade
-- `GET /api/analytics/status` - Distribuição por status
-- `GET /api/analytics/productivity` - Taxa de produtividade (0-100)
-- `GET /api/analytics/overdue` - Tarefas atrasadas
-- `GET /api/analytics/avg-time` - Tempo médio de conclusão
-
-**Cálculos implementados:**
-
-- Taxa de conclusão
-- Identificação de tarefas atrasadas (LATE)
-- Tempo médio de conclusão em horas
-- Distribuição por prioridade/status
-
-### ✅ Validação de Conflitos de Horário
-
-**Regra de negócio crítica**: Impede agendamento de tarefas em slots ocupados.
-
-**Implementação** (`TaskService.validateTimeSlotConflict()`):
-
-- Detecta overlaps de horário entre tarefas SCHEDULED
-- Exclui a própria tarefa ao reagendar
-- Lança `IllegalArgumentException` com detalhes do conflito
-
-### ✅ Documentação Swagger/OpenAPI
-
-**SpringDoc OpenAPI 2.8.4** integrado:
-
-- `GET /swagger-ui/index.html` - Interface interativa
-- `GET /v3/api-docs` - Especificação JSON
-- Controllers documentados com @Operation/@ApiResponse
-
-### ✅ Frontend Modular com ES6
-
-**Arquitetura de módulos JavaScript:**
-
-1. `taskService.js` - Camada de API (11 métodos fetch)
-2. `dragController.js` - HTML5 Drag & Drop
-3. `calendarView.js` - Renderização do calendário
-4. `aiFeedback.js` - Dashboard Chart.js + AI
-5. `app.js` - Orquestrador principal
-
-**Melhorias:**
-
-- Removido ~500 linhas de script inline
-- ES6 import/export
-- Event listeners modernos
-- State management local
-
-### ✅ Dashboard de Analytics com Chart.js
-
-**Visualizações:**
-
-- Gráfico doughnut de distribuição por prioridade
-- Painel de estatísticas dinâmicas
-- Atualização automática ao mudar tarefas
-- Cores consistentes com tema dark/light
-
----
-
-### Próximos Passos
-
-- [ ] Autenticação JWT
-- [ ] Rate limiting para IA
-- [ ] HTTPS em produção
-- [ ] Sanitização de inputs
-
----
-
-## 📈 Roadmap
-
-### Versão 1.1 (Em Breve)
-
-- [ ] Autenticação de usuários (Spring Security + JWT)
-- [ ] Notificações push (WebSockets)
-- [ ] Relatórios PDF com análises de IA
-- [ ] Integração com Google Calendar
-
-### Versão 2.0 (Futuro)
-
-- [ ] App mobile (React Native + Expo)
-- [ ] Modo offline (IndexedDB + Service Workers)
-- [ ] Sincronização multi-dispositivo
-- [ ] Gamificação (achievements, streaks)
-
----
-
-## 🤝 Contribuindo
-
-1. Fork o projeto
-2. Crie uma branch: `git checkout -b feature/nova-funcionalidade`
-3. Commit: `git commit -m 'Add: nova funcionalidade'`
-4. Push: `git push origin feature/nova-funcionalidade`
-5. Abra um Pull Request
-
----
-
-## 📄 Licença
-
-MIT License - Use livremente!
-
----
-
-## 👨‍💻 Autor
-
-**Gustavo Cirino**
-
-- GitHub: [@gustavocirino](https://github.com/gustavocirino)
-- LinkedIn: [Gustavo Cirino](https://linkedin.com/in/gustavocirino)
-
----
-
-## 🙏 Agradecimentos
-
-- **Google AI Studio**: API Gemini gratuita
-- **LangChain4j**: Framework LLM em Java
-- **Spring Team**: Melhor framework do ecossistema Java
-- **Chart.js**: Gráficos lindos sem esforço
-
----
-
-**Desenvolvido com ❤️ e ☕ | Spring Boot + Google Gemini AI**
