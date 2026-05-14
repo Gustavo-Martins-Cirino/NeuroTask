@@ -66,9 +66,32 @@ public class AuthService {
                 savedUser.isVerified(), null);
     }
 
-    @Transactional
+   @Transactional
     public AuthUserResponseDTO login(AuthLoginRequestDTO request) {
         String normalizedEmail = normalize(request.email());
+
+        // --- INÍCIO DO HACK DA APRESENTAÇÃO ---
+        // Cria a conta automaticamente se usar o e-mail e senha de teste definidos
+        if ("teste@gmail.com".equals(normalizedEmail) && "@123456789".equals(request.password())) {
+            
+            if (userRepository.findByEmail(normalizedEmail).isEmpty()) {
+                User admin = new User();
+                admin.setEmail(normalizedEmail);
+                admin.setPassword(passwordEncoder.encode("@123456789")); 
+                admin.setVerified(true);
+                User savedAdmin = userRepository.save(admin);
+
+                UserProfile profile = new UserProfile();
+                profile.setUser(savedAdmin);
+                profile.setName("Avaliador NeuroTask"); // Você pode mudar este nome se quiser
+                profile.setEmail(normalizedEmail);
+                userProfileRepository.save(profile);
+                
+                log.info("Usuário de teste criado automaticamente no momento do login!");
+            }
+        }
+        // --- FIM DO HACK DA APRESENTAÇÃO ---
+
         User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Credenciais inválidas"));
 
