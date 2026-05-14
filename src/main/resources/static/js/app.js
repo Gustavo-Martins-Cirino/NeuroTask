@@ -53,13 +53,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     token = null;
   }
 
-  // Sem token: mostra tela de login e não tenta carregar nada
-  if (!token) {
-    if (typeof window.showAuthView === "function") {
-      window.showAuthView("login");
-    }
-    return;
-  }
 
   // Com token: tenta carregar tarefas e renderizar o calendário
   try {
