@@ -32,7 +32,7 @@ public class PushReminderScheduler {
         this.objectMapper = objectMapper;
     }
 
-    @Scheduled(fixedDelay = 30_000)
+    // @Scheduled(fixedDelay = 30_000)
     public void tick() {
         List<PushSubscription> subs = subscriptionService.findAll();
         if (subs.isEmpty())
