@@ -40,6 +40,12 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
+		<dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
 		<!-- Persistência de Dados e JPA/Hibernate -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
