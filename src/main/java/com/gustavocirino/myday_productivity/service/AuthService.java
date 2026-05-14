@@ -48,7 +48,7 @@ public class AuthService {
         User user = new User();
         user.setEmail(normalizedEmail);
         user.setPassword(passwordEncoder.encode(rawPassword));
-        user.setVerified(false);
+        user.setVerified(true);
         user.setVerificationCode(generateVerificationCode());
 
         // AQUI: Salvando o usuário no banco para gerar o ID
