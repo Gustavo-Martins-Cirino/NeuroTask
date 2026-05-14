@@ -27,7 +27,7 @@ import java.util.Optional;
  * a migração é automaticamente ignorada.
  */
 @Slf4j
-@Component
+
 @RequiredArgsConstructor
 public class DevOrphanTaskMigration {
 
