@@ -74,7 +74,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         // Demais endpoints requerem autenticação
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
 
                 // Retornar 401 Unauthorized em vez de 403 Forbidden para requisições não autenticadas
