@@ -106,7 +106,7 @@ http://localhost:8080
 
 Acompanhe as evoluções testáveis sob ambiente de produção estável no link hospedado.
 
-🔗 
+🔗 https://neurotask-tthk.onrender.com
 
 
 ---
